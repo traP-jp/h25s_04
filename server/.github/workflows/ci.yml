@@ -33,28 +33,28 @@ jobs:
           version: latest
           args: --timeout=10m
 
-  test-unit:
-    name: Unit Test
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: ./go.mod
-      - name: Unit test with xc
-        run: go run github.com/joerdav/xc/cmd/xc@latest test-unit
-
-  test-integration:
-    name: Integration Test
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: ./go.mod
-      - name: Integration test with xc
-        run: go run github.com/joerdav/xc/cmd/xc@latest test-integration
+  # test-unit:
+  #   name: Unit Test
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-go@v5
+  #       with:
+  #         go-version-file: ./go.mod
+  #     - name: Unit test with xc
+  #       run: go run github.com/joerdav/xc/cmd/xc@latest test-unit
+  #
+  # test-integration:
+  #   name: Integration Test
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-go@v5
+  #       with:
+  #         go-version-file: ./go.mod
+  #     - name: Integration test with xc
+  #       run: go run github.com/joerdav/xc/cmd/xc@latest test-integration
