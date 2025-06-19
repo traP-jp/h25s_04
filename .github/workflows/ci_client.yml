@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -33,11 +35,13 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+        working-directory: ./client
       - run: npm run gen-api
+        working-directory: ./client
       - uses: actions/upload-artifact@v4
         with:
           name: apis
-          path: ./src/lib/apis/generated
+          path: ./client/src/lib/apis/generated
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -46,6 +50,8 @@ jobs:
       - genApi
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -66,6 +72,8 @@ jobs:
       - genApi
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -84,6 +92,8 @@ jobs:
       - genApi
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -102,6 +112,8 @@ jobs:
       - genApi
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
