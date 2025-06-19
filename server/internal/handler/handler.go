@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"backend/internal/repository"
-
 	"github.com/labstack/echo/v4"
+
+	"github.com/traP-jp/h25s_04/server/internal/repository"
 )
 
 type Handler struct {

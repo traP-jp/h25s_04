@@ -1,12 +1,12 @@
 package main
 
 import (
-	"backend/cmd/server/server"
-	"backend/pkg/config"
-	"backend/pkg/database"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"github.com/traP-jp/h25s_04/server/cmd/server/server"
+	"github.com/traP-jp/h25s_04/server/pkg/config"
+	"github.com/traP-jp/h25s_04/server/pkg/database"
 )
 
 func main() {

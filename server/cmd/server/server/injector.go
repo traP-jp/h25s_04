@@ -1,11 +1,11 @@
 package server
 
 import (
-	"backend/internal/handler"
-	"backend/internal/repository"
-
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+
+	"github.com/traP-jp/h25s_04/server/internal/handler"
+	"github.com/traP-jp/h25s_04/server/internal/repository"
 )
 
 type Server struct {

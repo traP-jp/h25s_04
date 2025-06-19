@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"backend/internal/repository"
 	"fmt"
 	"net/http"
 
@@ -9,6 +8,8 @@ import (
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+
+	"github.com/traP-jp/h25s_04/server/internal/repository"
 )
 
 // スキーマ定義
