@@ -1,0 +1,65 @@
+name: CI (Server)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'server/**'
+  pull_request:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ./server/go.mod
+          cache-dependency-path: ./server/go.sum
+      - name: Build with xc
+        run: cd server && go run github.com/joerdav/xc/cmd/xc@latest build
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ./server/go.mod
+          cache-dependency-path: ./server/go.sum
+      - uses: golangci/golangci-lint-action@v7
+        with:
+          working-directory: server
+          version: latest
+          args: --timeout=10m
+
+  # test-unit:
+  #   name: Unit Test
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-go@v5
+  #       with:
+  #         go-version-file: ./go.mod
+  #     - name: Unit test with xc
+  #       run: go run github.com/joerdav/xc/cmd/xc@latest test-unit
+  #
+  # test-integration:
+  #   name: Integration Test
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-go@v5
+  #       with:
+  #         go-version-file: ./go.mod
+  #     - name: Integration test with xc
+  #       run: go run github.com/joerdav/xc/cmd/xc@latest test-integration
