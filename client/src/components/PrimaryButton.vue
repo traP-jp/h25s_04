@@ -1,5 +1,13 @@
+<script lang="ts" setup>
+interface Props {
+  text: string
+}
+
+const {text} = defineProps<Props>()
+</script>
+
 <template>
-  <button class="omise">お店一覧</button>
+  <button class="omise">{{text}}</button>
 </template>
 
 <style lang="scss" modele>

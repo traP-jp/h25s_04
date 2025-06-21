@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import PrimaryButton from './PrimaryButton.vue'
-import SecondaryButton from './SecondaryButton.vue'
 </script>
 
 <template>
@@ -8,8 +7,8 @@ import SecondaryButton from './SecondaryButton.vue'
     <div>aaaa</div>
     <div>タイトル</div>
     <div class="buttons">
-      <primary-button></primary-button>
-      <secondary-button></secondary-button>
+      <primary-button :text="'お店一覧'" />
+      <primary-button :text="'新規投稿'" />
     </div>
   </header>
 </template>
