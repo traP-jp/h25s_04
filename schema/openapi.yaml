@@ -216,7 +216,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReviewListResponse'
+                $ref: '#/components/schemas/ReviewDetailListResponse'
         '404':
           description: Eatery not found
           content:
@@ -783,6 +783,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewSummary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - data
+        - pagination
+
+    ReviewDetailListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewDetail'
         pagination:
           $ref: '#/components/schemas/Pagination'
       required:

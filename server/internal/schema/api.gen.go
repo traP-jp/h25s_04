@@ -142,6 +142,12 @@ type ReviewDetail struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+// ReviewDetailListResponse defines model for ReviewDetailListResponse.
+type ReviewDetailListResponse struct {
+	Data       []ReviewDetail `json:"data"`
+	Pagination Pagination     `json:"pagination"`
+}
+
 // ReviewListResponse defines model for ReviewListResponse.
 type ReviewListResponse struct {
 	Data       []ReviewSummary `json:"data"`
