@@ -16,6 +16,11 @@ func main() {
 	// middlewares
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{
+			"http://localhost:8082", // Swagger UI
+		},
+	}))
 
 	// connect to and migrate database
 	db, err := database.Setup(config.MySQL())
