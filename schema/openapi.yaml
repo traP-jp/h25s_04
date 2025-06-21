@@ -1,0 +1,782 @@
+openapi: 3.0.3
+info:
+  title: H25S_04 Restaurant Review API
+  description: API for restaurant reviews and eatery management
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+paths:
+  /eateries:
+    get:
+      summary: Get list of eateries
+      description: Returns a list of all eateries with optional query filtering
+      tags:
+        - Eateries
+      parameters:
+        - name: query
+          in: query
+          description: Search query to filter eateries by name or description
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Eatery'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a new eatery
+      description: Creates a new eatery
+      tags:
+        - Eateries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EateryCreate'
+      responses:
+        '201':
+          description: Eatery created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Eatery'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /eateries/{eateryId}:
+    get:
+      summary: Get eatery by ID
+      description: Returns a specific eatery by its ID
+      tags:
+        - Eateries
+      parameters:
+        - name: eateryId
+          in: path
+          required: true
+          description: UUID of the eatery
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Eatery'
+        '404':
+          description: Eatery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update eatery
+      description: Updates an existing eatery's information
+      tags:
+        - Eateries
+      parameters:
+        - name: eateryId
+          in: path
+          required: true
+          description: UUID of the eatery
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EateryUpdate'
+      responses:
+        '200':
+          description: Eatery updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Eatery'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Eatery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /eateries/{eateryId}/reviews:
+    get:
+      summary: Get reviews for a specific eatery
+      description: Returns all reviews for a specific eatery
+      tags:
+        - Reviews
+      parameters:
+        - name: eateryId
+          in: path
+          required: true
+          description: UUID of the eatery
+          schema:
+            type: string
+            format: uuid
+        - name: sortBy
+          in: query
+          description: Sort order for reviews
+          required: false
+          schema:
+            type: string
+            enum: [newest, oldest]
+            default: newest
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReviewSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '404':
+          description: Eatery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a review for an eatery
+      description: Creates a new review for a specific eatery
+      tags:
+        - Reviews
+      parameters:
+        - name: eateryId
+          in: path
+          required: true
+          description: UUID of the eatery
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+      responses:
+        '201':
+          description: Review created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetail'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Eatery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reviews:
+    get:
+      summary: Get all reviews (summary for top page)
+      description: Returns a list of all reviews across all eateries with images only, optimized for the top page
+      tags:
+        - Reviews
+      parameters:
+        - name: sortBy
+          in: query
+          description: Sort order for reviews
+          required: false
+          schema:
+            type: string
+            enum: [newest, oldest]
+            default: newest
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReviewSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reviews/{reviewId}:
+    get:
+      summary: Get review details
+      description: Returns detailed information about a specific review
+      tags:
+        - Reviews
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: UUID of the review
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetail'
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update review
+      description: Updates an existing review
+      tags:
+        - Reviews
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: UUID of the review
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdate'
+      responses:
+        '200':
+          description: Review updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetail'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete review
+      description: Deletes a specific review
+      tags:
+        - Reviews
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: UUID of the review
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Review deleted successfully
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /images:
+    post:
+      summary: Upload image
+      description: Uploads an image file and returns its ID
+      tags:
+        - Images
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Image file to upload
+              required:
+                - image
+      responses:
+        '201':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /images/{imageId}:
+    get:
+      summary: Download image
+      description: Downloads an image by its ID
+      tags:
+        - Images
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          description: UUID of the image
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Image file
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/gif:
+              schema:
+                type: string
+                format: binary
+            image/webp:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Eatery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the eatery
+        name:
+          type: string
+          description: Name of the eatery
+        description:
+          type: string
+          description: Description of the eatery
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - name
+        - description
+        - createdAt
+        - updatedAt
+
+    EateryCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the eatery
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          description: Description of the eatery
+          minLength: 1
+          maxLength: 1000
+      required:
+        - name
+        - description
+
+    EateryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the eatery
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          description: Description of the eatery
+          minLength: 1
+          maxLength: 1000
+
+    ReviewSummary:
+      type: object
+      description: Summary of a review for list views (without full content)
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the review
+        authorId:
+          type: string
+          description: ID of the review author
+        eateryId:
+          type: string
+          format: uuid
+          description: ID of the eatery being reviewed
+        eateryName:
+          type: string
+          description: Name of the eatery being reviewed
+        imageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of image IDs attached to the review
+        summary:
+          type: string
+          description: Short summary or first few lines of the review
+          maxLength: 200
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - authorId
+        - eateryId
+        - eateryName
+        - imageIds
+        - createdAt
+        - updatedAt
+
+    ReviewDetail:
+      type: object
+      description: Detailed review information
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the review
+        content:
+          type: string
+          description: Full content of the review
+        authorId:
+          type: string
+          description: ID of the review author
+        eateryId:
+          type: string
+          format: uuid
+          description: ID of the eatery being reviewed
+        eateryName:
+          type: string
+          description: Name of the eatery being reviewed
+        imageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of image IDs attached to the review
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - content
+        - authorId
+        - eateryId
+        - eateryName
+        - imageIds
+        - createdAt
+        - updatedAt
+
+    ReviewCreate:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Content of the review
+          minLength: 1
+          maxLength: 2000
+        authorId:
+          type: string
+          description: ID of the review author
+          minLength: 1
+        imageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of image IDs to attach to the review
+          default: []
+      required:
+        - content
+        - authorId
+
+    ReviewUpdate:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Content of the review
+          minLength: 1
+          maxLength: 2000
+        imageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of image IDs to attach to the review
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Number of items per page
+        total:
+          type: integer
+          description: Total number of items
+        totalPages:
+          type: integer
+          description: Total number of pages
+      required:
+        - page
+        - limit
+        - total
+        - totalPages
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          description: Additional error details
+      required:
+        - error
+        - code
+
+    ImageUploadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the uploaded image
+        url:
+          type: string
+          description: URL to access the uploaded image
+      required:
+        - id
+        - url
+
+tags:
+  - name: Eateries
+    description: Operations related to eateries (restaurants)
+  - name: Reviews
+    description: Operations related to reviews
+  - name: Images
+    description: Operations related to image management
