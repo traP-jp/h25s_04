@@ -1,22 +1,26 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { type ReviewSummary } from '../lib/apis'
+import apis from '../lib/apis'
 
-interface Review {
-  pic: string
-  username: string
-  restaurant: string
-  id: number
-}
-
-const reviews = ref<Review[]>([
+const reviews = ref<ReviewSummary[]>([
   {
-    pic: 'https://q.trap.jp/api/v3/public/icon/Pugma',
-    restaurant: 'ぷぐま',
-    username: '偉大な先輩',
-    id: 0,
+    imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
+    eateryName: 'ぷぐま',
+    authorId: '偉大な先輩',
+    id: '0',
+    createdAt: '2023-10-01T00:00:00Z',
+    updatedAt: '2023-10-01T00:00:00Z',
+    eateryId: '0',
+    summary: 'ぷぐまのレビュー',
   },
 ])
 const sort = ref('')
+
+onMounted(async () => {
+  reviews.value = (await apis.reviewsGet()).data.data ?? []
+  console.log(reviews.value)
+})
 </script>
 
 <template>
@@ -30,10 +34,10 @@ const sort = ref('')
   <div :class="$style.tileview">
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
       <div>
-        <img :class="$style.foodimage" :src="review.pic" alt="food" />
+        <img :class="$style.foodimage" :src="review.imageIds[0]" alt="food" />
       </div>
-      <div :class="$style.restaurantname">{{ review.restaurant }}</div>
-      <div :class="$style.username">{{ review.username }}</div>
+      <div :class="$style.restaurantname">{{ review.eateryName }}</div>
+      <div :class="$style.username">{{ review.authorId }}</div>
     </div>
   </div>
 </template>
