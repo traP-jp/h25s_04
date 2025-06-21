@@ -13,10 +13,21 @@ import (
 
 // GetEateries implements schema.ServerInterface.
 func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "GetEateries endpoint is not implemented yet",
-	})
+	eateries, err := h.repo.GetEateries(c.Request().Context(), params)
+	if err != nil {
+		c.Logger().Errorf("failed to get eateries: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
+
+	res := make([]schema.Eatery, len(eateries))
+	for i, eatery := range eateries {
+		res[i] = schema.Eatery{
+			Id:          types.UUID(eatery.ID),
+			Name:        eatery.Name,
+			Description: eatery.Description,
+		}
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 // PostEateries implements schema.ServerInterface.
