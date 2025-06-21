@@ -9,16 +9,17 @@ const markerPosition = ref([35.605958, 139.68354]) // ピンを立てる座標
 </script>
 
 <template>
-  <div style="height: 600px; width: 800px">
-    <l-map v-model:zoom="zoom" :use-global-leaflet="false" :center="center">
-      <l-tile-layer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      ></l-tile-layer>
+  <div :class="$style.map">
+    <l-map :zoom="zoom" :use-global-leaflet="false" :center="center">
+      <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <l-marker :lat-lng="markerPosition"></l-marker>
     </l-map>
   </div>
 </template>
 
 <style lang="scss" module>
-/* 必要に応じてスタイルを追加 */
+.map {
+  height: min(100vh, 800px);
+  width: 100%;
+}
 </style>
