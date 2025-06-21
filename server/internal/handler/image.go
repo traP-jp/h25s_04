@@ -38,8 +38,8 @@ func (h *Handler) PostImages(c echo.Context) error {
 
 // GetImagesImageId implements schema.ServerInterface.
 func (h *Handler) GetImagesImageId(c echo.Context, imageId types.UUID) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "GetImagesImageId endpoint is not implemented yet",
-	})
+	image, contentType, err := h.repo.GetImage(c.Request().Context(), imageId)
+
+	// TODO: 画像の適切な返し方を調べてみてください
+	return nil
 }
