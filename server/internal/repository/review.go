@@ -18,7 +18,7 @@ type (
 
 func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid.UUID) ([]*Review, error) {
 	reviews := []*Review{}
-	if err := r.db.SelectContext(ctx, reviews, "SELECT * FROM reviews WHERE eatery_id = ?", eateryID); err != nil {
+	if err := r.db.SelectContext(ctx, &reviews, "SELECT * FROM reviews WHERE eatery_id = ?", eateryID); err != nil {
 		return nil, fmt.Errorf("select eatery: %w", err)
 	}
 
