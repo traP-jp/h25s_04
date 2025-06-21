@@ -5,18 +5,6 @@ import useParam from '../lib/param'
 
 const eateryId = useParam('eateryId')
 
-interface Restaurant {
-  name: string
-  description: string
-  id: number
-}
-
-const shopDetail = ref<Restaurant>({
-  name: 'ぷぐま',
-  description: '普通です',
-  id: 0,
-})
-
 const eateryDetail = ref<Eatery>()
 onMounted(async () => {
   eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId.value)).data
@@ -26,8 +14,8 @@ onMounted(async () => {
 <template>
   <div :class="$style.shopInfo">
     <div :class="$style.review">
-      <div>店名: {{ shopDetail.name }}</div>
-      <div>説明: {{ shopDetail.description }}</div>
+      <div>店名: {{ eateryDetail?.name }}</div>
+      <div>説明: {{ eateryDetail?.description }}</div>
       <div></div>
     </div>
   </div>
