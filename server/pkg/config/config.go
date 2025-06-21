@@ -68,3 +68,7 @@ func ObjectStorage(ctx context.Context) (*aws.Config, func(*s3.Options), error) 
 
 	return &cfg, optFn, nil
 }
+
+func BucketName() string {
+	return getEnv("STORAGE_BUCKET_NAME", "h25s-04")
+}
