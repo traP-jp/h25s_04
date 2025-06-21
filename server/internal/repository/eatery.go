@@ -19,6 +19,20 @@ type (
 		Name        string
 		Description *string
 	}
+
+	eateryReview struct {
+		ID       uuid.UUID `db:"id"` // UUID
+		EateryID uuid.UUID `db:"eatery_id"`
+		UserID   string    `db:"user_id"`
+		Content  string    `db:"content"`
+	}
+
+	CreateEateryReviewParams struct {
+		ID       uuid.UUID `json:"id"`
+		EateryID uuid.UUID `json:"eatery_id"`
+		Content  string    `json:"content"`
+		UserID   string    `json:"user_id"`
+	}
 )
 
 func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesParams) ([]*Eatery, error) {
@@ -53,4 +67,11 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 	}
 
 	return eatery, nil
+}
+func (r *Repository) PostEateryReview(ctx context.Context, params CreateEateryReviewParams) (uuid.UUID, error) {
+	reviewID := uuid.New()
+	if _, err := r.db.ExecContext(ctx, "INSERT INTO reviews (id, eateryid, authorid, content) VALUES (?, ?, ?, ?)", reviewID, params.EateryID, params.UserID, params.Content); err != nil {
+		return uuid.Nil, fmt.Errorf("insert eatery review: %w", err)
+	}
+	return reviewID, nil
 }
