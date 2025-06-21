@@ -172,6 +172,9 @@ type ReviewUpdate struct {
 	ImageIds *[]openapi_types.UUID `json:"imageIds,omitempty"`
 }
 
+// XForwardedUser defines model for X-Forwarded-User.
+type XForwardedUser = string
+
 // GetEateriesParams defines parameters for GetEateries.
 type GetEateriesParams struct {
 	// Query Search query to filter eateries by name or description
@@ -182,6 +185,18 @@ type GetEateriesParams struct {
 
 	// Limit Number of items per page
 	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// PostEateriesParams defines parameters for PostEateries.
+type PostEateriesParams struct {
+	// XForwardedUser ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+	XForwardedUser *XForwardedUser `json:"X-Forwarded-User,omitempty"`
+}
+
+// PutEateriesEateryIdParams defines parameters for PutEateriesEateryId.
+type PutEateriesEateryIdParams struct {
+	// XForwardedUser ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+	XForwardedUser *XForwardedUser `json:"X-Forwarded-User,omitempty"`
 }
 
 // GetEateriesEateryIdReviewsParams defines parameters for GetEateriesEateryIdReviews.
@@ -198,6 +213,12 @@ type GetEateriesEateryIdReviewsParams struct {
 
 // GetEateriesEateryIdReviewsParamsSortBy defines parameters for GetEateriesEateryIdReviews.
 type GetEateriesEateryIdReviewsParamsSortBy string
+
+// PostEateriesEateryIdReviewsParams defines parameters for PostEateriesEateryIdReviews.
+type PostEateriesEateryIdReviewsParams struct {
+	// XForwardedUser ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+	XForwardedUser *XForwardedUser `json:"X-Forwarded-User,omitempty"`
+}
 
 // PostImagesMultipartBody defines parameters for PostImages.
 type PostImagesMultipartBody struct {
@@ -219,6 +240,18 @@ type GetReviewsParams struct {
 
 // GetReviewsParamsSortBy defines parameters for GetReviews.
 type GetReviewsParamsSortBy string
+
+// DeleteReviewsReviewIdParams defines parameters for DeleteReviewsReviewId.
+type DeleteReviewsReviewIdParams struct {
+	// XForwardedUser ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+	XForwardedUser *XForwardedUser `json:"X-Forwarded-User,omitempty"`
+}
+
+// PutReviewsReviewIdParams defines parameters for PutReviewsReviewId.
+type PutReviewsReviewIdParams struct {
+	// XForwardedUser ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+	XForwardedUser *XForwardedUser `json:"X-Forwarded-User,omitempty"`
+}
 
 // PostEateriesJSONRequestBody defines body for PostEateries for application/json ContentType.
 type PostEateriesJSONRequestBody = EateryCreate
@@ -242,19 +275,19 @@ type ServerInterface interface {
 	GetEateries(ctx echo.Context, params GetEateriesParams) error
 	// Create a new eatery
 	// (POST /eateries)
-	PostEateries(ctx echo.Context) error
+	PostEateries(ctx echo.Context, params PostEateriesParams) error
 	// Get eatery by ID
 	// (GET /eateries/{eateryId})
 	GetEateriesEateryId(ctx echo.Context, eateryId openapi_types.UUID) error
 	// Update eatery
 	// (PUT /eateries/{eateryId})
-	PutEateriesEateryId(ctx echo.Context, eateryId openapi_types.UUID) error
+	PutEateriesEateryId(ctx echo.Context, eateryId openapi_types.UUID, params PutEateriesEateryIdParams) error
 	// Get reviews for a specific eatery
 	// (GET /eateries/{eateryId}/reviews)
 	GetEateriesEateryIdReviews(ctx echo.Context, eateryId openapi_types.UUID, params GetEateriesEateryIdReviewsParams) error
 	// Create a review for an eatery
 	// (POST /eateries/{eateryId}/reviews)
-	PostEateriesEateryIdReviews(ctx echo.Context, eateryId openapi_types.UUID) error
+	PostEateriesEateryIdReviews(ctx echo.Context, eateryId openapi_types.UUID, params PostEateriesEateryIdReviewsParams) error
 	// Upload image
 	// (POST /images)
 	PostImages(ctx echo.Context) error
@@ -266,13 +299,13 @@ type ServerInterface interface {
 	GetReviews(ctx echo.Context, params GetReviewsParams) error
 	// Delete review
 	// (DELETE /reviews/{reviewId})
-	DeleteReviewsReviewId(ctx echo.Context, reviewId openapi_types.UUID) error
+	DeleteReviewsReviewId(ctx echo.Context, reviewId openapi_types.UUID, params DeleteReviewsReviewIdParams) error
 	// Get review details
 	// (GET /reviews/{reviewId})
 	GetReviewsReviewId(ctx echo.Context, reviewId openapi_types.UUID) error
 	// Update review
 	// (PUT /reviews/{reviewId})
-	PutReviewsReviewId(ctx echo.Context, reviewId openapi_types.UUID) error
+	PutReviewsReviewId(ctx echo.Context, reviewId openapi_types.UUID, params PutReviewsReviewIdParams) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -316,8 +349,28 @@ func (w *ServerInterfaceWrapper) GetEateries(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) PostEateries(ctx echo.Context) error {
 	var err error
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostEateriesParams
+
+	headers := ctx.Request().Header
+	// ------------- Optional header parameter "X-Forwarded-User" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("X-Forwarded-User")]; found {
+		var XForwardedUser XForwardedUser
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for X-Forwarded-User, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithOptions("simple", "X-Forwarded-User", valueList[0], &XForwardedUser, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false})
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter X-Forwarded-User: %s", err))
+		}
+
+		params.XForwardedUser = &XForwardedUser
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PostEateries(ctx)
+	err = w.Handler.PostEateries(ctx, params)
 	return err
 }
 
@@ -348,8 +401,28 @@ func (w *ServerInterfaceWrapper) PutEateriesEateryId(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eateryId: %s", err))
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutEateriesEateryIdParams
+
+	headers := ctx.Request().Header
+	// ------------- Optional header parameter "X-Forwarded-User" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("X-Forwarded-User")]; found {
+		var XForwardedUser XForwardedUser
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for X-Forwarded-User, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithOptions("simple", "X-Forwarded-User", valueList[0], &XForwardedUser, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false})
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter X-Forwarded-User: %s", err))
+		}
+
+		params.XForwardedUser = &XForwardedUser
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PutEateriesEateryId(ctx, eateryId)
+	err = w.Handler.PutEateriesEateryId(ctx, eateryId, params)
 	return err
 }
 
@@ -403,8 +476,28 @@ func (w *ServerInterfaceWrapper) PostEateriesEateryIdReviews(ctx echo.Context) e
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eateryId: %s", err))
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostEateriesEateryIdReviewsParams
+
+	headers := ctx.Request().Header
+	// ------------- Optional header parameter "X-Forwarded-User" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("X-Forwarded-User")]; found {
+		var XForwardedUser XForwardedUser
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for X-Forwarded-User, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithOptions("simple", "X-Forwarded-User", valueList[0], &XForwardedUser, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false})
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter X-Forwarded-User: %s", err))
+		}
+
+		params.XForwardedUser = &XForwardedUser
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PostEateriesEateryIdReviews(ctx, eateryId)
+	err = w.Handler.PostEateriesEateryIdReviews(ctx, eateryId, params)
 	return err
 }
 
@@ -476,8 +569,28 @@ func (w *ServerInterfaceWrapper) DeleteReviewsReviewId(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reviewId: %s", err))
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteReviewsReviewIdParams
+
+	headers := ctx.Request().Header
+	// ------------- Optional header parameter "X-Forwarded-User" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("X-Forwarded-User")]; found {
+		var XForwardedUser XForwardedUser
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for X-Forwarded-User, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithOptions("simple", "X-Forwarded-User", valueList[0], &XForwardedUser, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false})
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter X-Forwarded-User: %s", err))
+		}
+
+		params.XForwardedUser = &XForwardedUser
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.DeleteReviewsReviewId(ctx, reviewId)
+	err = w.Handler.DeleteReviewsReviewId(ctx, reviewId, params)
 	return err
 }
 
@@ -508,8 +621,28 @@ func (w *ServerInterfaceWrapper) PutReviewsReviewId(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reviewId: %s", err))
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutReviewsReviewIdParams
+
+	headers := ctx.Request().Header
+	// ------------- Optional header parameter "X-Forwarded-User" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("X-Forwarded-User")]; found {
+		var XForwardedUser XForwardedUser
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for X-Forwarded-User, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithOptions("simple", "X-Forwarded-User", valueList[0], &XForwardedUser, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false})
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter X-Forwarded-User: %s", err))
+		}
+
+		params.XForwardedUser = &XForwardedUser
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PutReviewsReviewId(ctx, reviewId)
+	err = w.Handler.PutReviewsReviewId(ctx, reviewId, params)
 	return err
 }
 
