@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -25,12 +26,16 @@ func (h *Handler) PostEateries(c echo.Context, params schema.PostEateriesParams)
 	})
 }
 
-// GetEateriesEateryId implements schema.ServerInterface.
+// GetEateriesEateryId implements schema.ServerInterface.a
 func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "GetEateriesEateryId endpoint is not implemented yet",
-	})
+	//Id := types.UUID(eateryId)
+	eatery, err := h.repo.GetEatery(c.Request().Context(), eateryId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to get eatery: %v", err))
+	}
+	// TODO: Return the eatery as JSON or handle as needed
+	return c.JSON(http.StatusOK, eatery)
+
 }
 
 // PutEateriesEateryId implements schema.ServerInterface.
