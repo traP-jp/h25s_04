@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import EateryTile from '../components/EateryTile.vue';
-
+import EateryTile from '../components/EateryTile.vue'
 </script>
 
 <template>
