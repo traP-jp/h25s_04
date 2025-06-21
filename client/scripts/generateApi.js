@@ -12,23 +12,23 @@ const SWAGGER_PATH = 'schema/openapi.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
 
 const generateCmd = [
-    'docker run --rm -v "$(dirname "$PWD"):/local" -u $(id -u) openapitools/openapi-generator-cli:v7.5.0',
-    'generate',
-    '-g',
-    'typescript-axios',
-    '-i',
-    `/local/${SWAGGER_PATH}`,
-    '-o',
-    `/local/client/${GENERATED_DIR}`,
+  'docker run --rm -v "$(dirname "$PWD"):/local" -u $(id -u) openapitools/openapi-generator-cli:v7.5.0',
+  'generate',
+  '-g',
+  'typescript-axios',
+  '-i',
+  `/local/${SWAGGER_PATH}`,
+  '-o',
+  `/local/client/${GENERATED_DIR}`,
 ]
 
 ;(async () => {
-    await fs.mkdir(path.resolve(__dirname, '../', GENERATED_DIR), {
-        recursive: true,
-    })
+  await fs.mkdir(path.resolve(__dirname, '../', GENERATED_DIR), {
+    recursive: true,
+  })
 
-    await execPromise(generateCmd.join(' '))
+  await execPromise(generateCmd.join(' '))
 
-    // generate Apis class
-    await addApis(GENERATED_DIR)
+  // generate Apis class
+  await addApis(GENERATED_DIR)
 })()
