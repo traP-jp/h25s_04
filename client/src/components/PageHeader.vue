@@ -5,9 +5,10 @@
   </header>
 </template>
 
-<style module>
+<style lang="scss" module>
 .header {
   display: flex;
+  background-color: $color-primary;
   justify-content: space-between;
   align-items: center;
   padding: 8px;
