@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUID, error) {
+func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid.UUID, error) {
 	imageID := uuid.New()
 	// オブジェクトストレージに画像をアップロードする
 	if _, err := r.client.PutObject(
