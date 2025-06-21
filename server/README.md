@@ -68,6 +68,12 @@ Compose Watchにより、ソースコードの変更を検知して自動で再�
 
 - <http://localhost:8080/> (API)
 - <http://localhost:8081/> (DBの管理画面)
+    - ユーザー名: `admin`
+    - パスワード: `pass`
+    - データベース: `app`
+- <http://localhost:9001/> (オブジェクトストレージの管理画面)
+    - username: `minioadmin`
+    - password: `minioadmin`
 
 ### Test
 
