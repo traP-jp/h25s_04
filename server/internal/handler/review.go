@@ -4,11 +4,79 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
+	"github.com/traP-jp/h25s_04/server/internal/repository"
 	"github.com/traP-jp/h25s_04/server/internal/schema"
 )
+
+// GetEateriesEateryIdReviews implements schema.ServerInterface.
+func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.GetEateriesEateryIdReviewsParams) error {
+	limit := 10 // Default limit
+	if params.Limit != nil {
+		limit = *params.Limit
+	}
+	pages := 1 // Default page
+	if params.Page != nil {
+		pages = *params.Page
+	}
+	offset := (pages - 1) * limit
+
+	reviews, err := h.repo.GetEateryEateryIDReviews(c.Request().Context(), uuid.UUID(eateryId), limit, offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
+
+	res := make([]schema.ReviewDetail, len(reviews))
+	for i, review := range reviews {
+		res[i] = schema.ReviewDetail{
+			Id:       review.Id,
+			EateryId: review.EateryID,
+			AuthorId: review.UserID,
+			Content:  review.Content,
+		}
+
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
+// PostEateriesEateryIdReviews implements schema.ServerInterface.
+func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.PostEateriesEateryIdReviewsParams) error {
+	var req schema.ReviewDetail
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
+	}
+
+	createParams := repository.CreateEateryReviewParams{
+		ID:       uuid.New(),
+		EateryID: uuid.UUID(eateryId),
+		Content:  req.Content,
+		UserID:   getUserID(params.XForwardedUser),
+	}
+
+	if _, err := h.repo.EateryExists(c.Request().Context(), createParams); err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Eatery with ID %s not found", eateryId))
+	}
+
+	reviewID, err := h.repo.PostEateryReview(c.Request().Context(), createParams)
+	userID := getUserID(params.XForwardedUser)
+	//reviewIDには、リポジトリから返された新しいレビューのIDが入る
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
+	}
+
+	res := schema.ReviewDetail{
+		Id:       reviewID,
+		Content:  req.Content,
+		EateryId: eateryId,
+		AuthorId: userID,
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
 
 // GetReviews implements schema.ServerInterface.
 func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) error {
