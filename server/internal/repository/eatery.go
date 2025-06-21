@@ -64,7 +64,7 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 
 func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid.UUID) ([]*ReviewDetail, error) {
 	reviews := []*ReviewDetail{}
-	if err := r.db.SelectContext(ctx, reviews, "SELECT * FROM reviews WHERE id = ?", eateryID); err != nil {
+	if err := r.db.SelectContext(ctx, reviews, "SELECT * FROM reviews WHERE eatery_id = ?", eateryID); err != nil {
 		return nil, fmt.Errorf("select eatery: %w", err)
 	}
 
