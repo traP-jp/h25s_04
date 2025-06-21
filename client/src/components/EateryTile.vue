@@ -1,22 +1,23 @@
 <template>
+    <div :class="$style.reviewtitle">最近投稿されたレビュー</div>
+    <div :class="$style.tileview">
         <div :class="$style.tile">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
-            <div>3</div>
+            <div>
+                <img :class="$style.foodimage" src="https://q.trap.jp/api/v3/public/icon/Pugma" alt="food" />
+            </div>
+            <div :class="$style.restaurantname">ぷぐま</div>
+            <div :class="$style.username">偉大な先輩</div>
         </div>
+    </div>
   </template>
   
   <style lang="scss" module>
-  .tile {
+  .reviewtitle {
+    font-size: 36px;
+    color: $color-primary-text;
+    text-align: left;
+  }
+  .tileview {
     display: flex;
     flex-wrap: wrap;
     background-color: $color-background;
@@ -26,8 +27,9 @@
     padding: 0.5rem;
   }
 
-.tile div {
-    font: 100 24px/100px sans-serif;
+.tile {
+    display: flex;
+    flex-direction: column;
     outline: 0.25rem solid $color-secondary;
     background-color: $color-background;
     color: $color-text;
@@ -35,6 +37,23 @@
     width: 200px;
     text-align: center;
     border-radius: 1rem;
+}
+
+.foodimage {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.restaurantname {
+    line-height: 1.0;
+    font-size: 24px;
+    color: $color-text;
+}
+.username {
+    line-height: 1.0;
+    font-size: 16px;
+    color: $color-text;
 }
 
   </style>
