@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import PageHeader from './components/PageHeader.vue'
+import EateryTile from './components/EateryTile.vue'
 </script>
 
 <template>
   <page-header></page-header>
   <router-view />
+  <eatery-tile></eatery-tile>
 </template>
 
 <style scoped>
