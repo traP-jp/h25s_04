@@ -22,7 +22,7 @@ func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUI
 	if _, err := r.client.PutObject(
 		ctx,
 		&s3.PutObjectInput{
-			Bucket:      aws.String("leaq"),
+			Bucket:      aws.String("h25s-04"),
 			Key:         aws.String(imageID.String()),
 			Body:        image,
 			ContentType: aws.String("image/png"),
