@@ -7,11 +7,13 @@ const { text } = defineProps<Props>()
 </script>
 
 <template>
-  <button class="pbutton">{{ text }}</button>
+  <button :class="$style.pButton">{{ text }}</button>
 </template>
 
 <style lang="scss" module>
-.pbutton {
+.pButton {
+  color: white;
+  font-size: 1.2rem;
   font-weight: 1000;
   border: 1px solid $color-secondary;
   background-color: #ffad3a;

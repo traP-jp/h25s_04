@@ -92,10 +92,12 @@ const apiInstance = new ReviewsApi(configuration);
 
 let eateryId: string; //UUID of the eatery (default to undefined)
 let reviewCreate: ReviewCreate; //
+let xForwardedUser: string; //ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） (optional) (default to undefined)
 
 const { status, data } = await apiInstance.eateriesEateryIdReviewsPost(
     eateryId,
-    reviewCreate
+    reviewCreate,
+    xForwardedUser
 );
 ```
 
@@ -105,6 +107,7 @@ const { status, data } = await apiInstance.eateriesEateryIdReviewsPost(
 |------------- | ------------- | ------------- | -------------|
 | **reviewCreate** | **ReviewCreate**|  | |
 | **eateryId** | [**string**] | UUID of the eatery | defaults to undefined|
+| **xForwardedUser** | [**string**] | ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） | (optional) defaults to undefined|
 
 
 ### Return type
@@ -206,9 +209,11 @@ const configuration = new Configuration();
 const apiInstance = new ReviewsApi(configuration);
 
 let reviewId: string; //UUID of the review (default to undefined)
+let xForwardedUser: string; //ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） (optional) (default to undefined)
 
 const { status, data } = await apiInstance.reviewsReviewIdDelete(
-    reviewId
+    reviewId,
+    xForwardedUser
 );
 ```
 
@@ -217,6 +222,7 @@ const { status, data } = await apiInstance.reviewsReviewIdDelete(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **reviewId** | [**string**] | UUID of the review | defaults to undefined|
+| **xForwardedUser** | [**string**] | ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） | (optional) defaults to undefined|
 
 
 ### Return type
@@ -314,10 +320,12 @@ const apiInstance = new ReviewsApi(configuration);
 
 let reviewId: string; //UUID of the review (default to undefined)
 let reviewUpdate: ReviewUpdate; //
+let xForwardedUser: string; //ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） (optional) (default to undefined)
 
 const { status, data } = await apiInstance.reviewsReviewIdPut(
     reviewId,
-    reviewUpdate
+    reviewUpdate,
+    xForwardedUser
 );
 ```
 
@@ -327,6 +335,7 @@ const { status, data } = await apiInstance.reviewsReviewIdPut(
 |------------- | ------------- | ------------- | -------------|
 | **reviewUpdate** | **ReviewUpdate**|  | |
 | **reviewId** | [**string**] | UUID of the review | defaults to undefined|
+| **xForwardedUser** | [**string**] | ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） | (optional) defaults to undefined|
 
 
 ### Return type

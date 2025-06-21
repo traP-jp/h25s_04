@@ -7,6 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
+
+	"github.com/traP-jp/h25s_04/server/pkg/config"
 )
 
 type (
@@ -22,7 +24,7 @@ func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid
 	if _, err := r.client.PutObject(
 		ctx,
 		&s3.PutObjectInput{
-			Bucket:      aws.String("h25s-04"),
+			Bucket:      aws.String(config.BucketName()),
 			Key:         aws.String(imageID.String()),
 			Body:        image,
 			ContentType: aws.String("image/png"),
@@ -35,4 +37,17 @@ func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid
 }
 
 // ファイル本体、Content-Type、エラーを返す
-// func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCloser, string, error)
+func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCloser, string, error) {
+	result, err := r.client.GetObject(
+		ctx,
+		&s3.GetObjectInput{
+			Bucket: aws.String(config.BucketName()),
+			Key:    aws.String(imageID.String()),
+		},
+	)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return result.Body, *result.ContentType, nil
+}
