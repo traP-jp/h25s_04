@@ -572,7 +572,6 @@ components:
       required:
         - id
         - name
-        - description
         - createdAt
         - updatedAt
 
@@ -591,7 +590,6 @@ components:
           maxLength: 1000
       required:
         - name
-        - description
 
     EateryUpdate:
       type: object
