@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/traP-jp/h25s_04/server/cmd/server/server"
+	"github.com/traP-jp/h25s_04/server/internal/schema"
 	"github.com/traP-jp/h25s_04/server/pkg/config"
 	"github.com/traP-jp/h25s_04/server/pkg/database"
 )
@@ -24,9 +25,7 @@ func main() {
 	defer db.Close()
 
 	s := server.Inject(db)
-
-	v1API := e.Group("/api/v1")
-	s.SetupRoutes(v1API)
+	schema.RegisterHandlersWithBaseURL(e, s.Handler, "/api/v1")
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
 }
