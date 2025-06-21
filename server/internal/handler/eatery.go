@@ -11,7 +11,7 @@ import (
 
 // GetEateries implements schema.ServerInterface.
 func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) error {
-	eateries, err := h.repo.GetEateries(c.Request().Context())
+	eateries, err := h.repo.GetEateries(c.Request().Context(), params)
 	if err != nil {
 		c.Logger().Errorf("failed to get eateries: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
@@ -25,19 +25,6 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 			Description: eatery.Description,
 		}
 	}
-
-	// クエリパラメータが指定されている場合は、フィルタリングを行う
-	if params.Query != nil {
-		filteredEateries := make([]schema.Eatery, 0)
-		for _, eatery := range res {
-			if eatery.Name == *params.Query {
-				filteredEateries = append(filteredEateries, eatery)
-			}
-		}
-		return c.JSON(http.StatusOK, filteredEateries)
-	}
-
-	// クエリパラメータが空の場合は、全ての飲食店を返す
 	return c.JSON(http.StatusOK, res)
 }
 
