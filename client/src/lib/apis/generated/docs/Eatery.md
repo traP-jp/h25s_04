@@ -1,28 +1,27 @@
 # Eatery
 
-
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**id** | **string** | Unique identifier for the eatery | [default to undefined]
-**name** | **string** | Name of the eatery | [default to undefined]
-**description** | **string** | Description of the eatery | [default to undefined]
-**createdAt** | **string** | Creation timestamp | [default to undefined]
-**updatedAt** | **string** | Last update timestamp | [default to undefined]
+| Name            | Type       | Description                      | Notes                  |
+| --------------- | ---------- | -------------------------------- | ---------------------- |
+| **id**          | **string** | Unique identifier for the eatery | [default to undefined] |
+| **name**        | **string** | Name of the eatery               | [default to undefined] |
+| **description** | **string** | Description of the eatery        | [default to undefined] |
+| **createdAt**   | **string** | Creation timestamp               | [default to undefined] |
+| **updatedAt**   | **string** | Last update timestamp            | [default to undefined] |
 
 ## Example
 
 ```typescript
-import { Eatery } from './api';
+import { Eatery } from './api'
 
 const instance: Eatery = {
-    id,
-    name,
-    description,
-    createdAt,
-    updatedAt,
-};
+  id,
+  name,
+  description,
+  createdAt,
+  updatedAt,
+}
 ```
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
