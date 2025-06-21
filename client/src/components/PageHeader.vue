@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import PrimaryButton from './PrimaryButton.vue'
-import SecondaryButton from './SecondaryButton.vue'
 </script>
 
 <template>
   <header :class="$style.header">
-    <div>aaaa</div>
+    <RouterLink to="/"><div>aaaa</div></RouterLink>
     <div>タイトル</div>
     <div>
-      <primary-button></primary-button>
-      <secondary-button></secondary-button>
+      <RouterLink to="/eatery"><PrimaryButton :text="'お店一覧'" /></RouterLink>
+      <RouterLink to="/eatery/new"
+        ><PrimaryButton :text="'新規投稿'"
+      /></RouterLink>
     </div>
   </header>
 </template>
