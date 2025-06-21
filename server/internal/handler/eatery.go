@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
+	"github.com/traP-jp/h25s_04/server/internal/repository"
 	"github.com/traP-jp/h25s_04/server/internal/schema"
 )
 
@@ -40,10 +41,19 @@ func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error
 
 // PutEateriesEateryId implements schema.ServerInterface.
 func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, params schema.PutEateriesEateryIdParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PutEateriesEateryId endpoint is not implemented yet",
-	})
+	var req schema.EateryCreate
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Failed to bind request: %v", err))
+	}
+	userID := getUserID(params.XForwardedUser)
+	eatery := repository.Eatery{
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery, userID); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
+	}
+	return c.NoContent(http.StatusNoContent)
 }
 
 // GetEateriesEateryIdReviews implements schema.ServerInterface.
