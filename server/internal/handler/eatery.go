@@ -18,7 +18,7 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 }
 
 // PostEateries implements schema.ServerInterface.
-func (h *Handler) PostEateries(c echo.Context) error {
+func (h *Handler) PostEateries(c echo.Context, params schema.PostEateriesParams) error {
 	return c.JSON(http.StatusNotImplemented, schema.Error{
 		Code:  "NOT_IMPLEMENTED",
 		Error: "PostEateries endpoint is not implemented yet",
@@ -34,7 +34,7 @@ func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error
 }
 
 // PutEateriesEateryId implements schema.ServerInterface.
-func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID) error {
+func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, params schema.PutEateriesEateryIdParams) error {
 	return c.JSON(http.StatusNotImplemented, schema.Error{
 		Code:  "NOT_IMPLEMENTED",
 		Error: "PutEateriesEateryId endpoint is not implemented yet",
@@ -50,7 +50,7 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 }
 
 // PostEateriesEateryIdReviews implements schema.ServerInterface.
-func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUID) error {
+func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.PostEateriesEateryIdReviewsParams) error {
 	return c.JSON(http.StatusNotImplemented, schema.Error{
 		Code:  "NOT_IMPLEMENTED",
 		Error: "PostEateriesEateryIdReviews endpoint is not implemented yet",
