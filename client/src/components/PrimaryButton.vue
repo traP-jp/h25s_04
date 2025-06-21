@@ -1,5 +1,5 @@
 <template>
-  <RouterLink to="/eatery"><button class="omise">お店一覧</button></RouterLink>
+  <button class="omise">お店一覧</button>
 </template>
 
 <style lang="scss" modele>

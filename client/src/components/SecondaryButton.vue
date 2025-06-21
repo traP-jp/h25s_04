@@ -1,7 +1,5 @@
 <template>
-  <RouterLink to="/eatary/new"
-    ><button class="sinki">新規投稿</button></RouterLink
-  >
+  <button class="sinki">新規投稿</button>
 </template>
 
 <style lang="scss" modele>
