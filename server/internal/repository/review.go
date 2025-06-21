@@ -32,3 +32,22 @@ func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid
 
 	return reviews, nil
 }
+
+// そのIDのレビューが存在するかチェック
+func (r *Repository) ReviewExists(ctx context.Context, params Review) (uuid.UUID, error) {
+	var exists bool
+	if err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM reviews WHERE id = ?)", params.Id); err != nil {
+		return uuid.Nil, fmt.Errorf("check review exists: %w", err)
+	}
+	if !exists {
+		return uuid.Nil, fmt.Errorf("review with id %s does not exist", params.Id)
+	}
+	return params.Id, nil
+}
+
+func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error {
+	if _, err := r.db.ExecContext(ctx, "DELETE FROM reviews WHERE id = ?", reviewID); err != nil {
+		return fmt.Errorf("delete review: %w", err)
+	}
+	return nil
+}
