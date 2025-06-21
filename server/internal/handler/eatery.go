@@ -42,7 +42,7 @@ func (h *Handler) PostEateries(c echo.Context, params schema.PostEateriesParams)
 		Description: req.Description,
 	}
 
-	return c.JSON(http.StatusBadRequest, res)
+	return c.JSON(http.StatusOK, res)
 }
 
 // GetEateriesEateryId implements schema.ServerInterface.a
