@@ -68,6 +68,7 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 
 	return eatery, nil
 }
+
 func (r *Repository) PostEateryReview(ctx context.Context, params CreateEateryReviewParams) (uuid.UUID, error) {
 	// パスパラメータから受け取ったeateryIDをparams.EateryIDにセットする場合は、
 	// 呼び出し元のハンドラでパスパラメータを取得し、CreateEateryReviewParamsにセットしてください。
@@ -99,4 +100,18 @@ func (r *Repository) EateryExists(ctx context.Context, params CreateEateryReview
 		return uuid.Nil, fmt.Errorf("eatery with that id does not exist")
 	}
 	return uuid.Nil, nil
+}
+
+func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eatery Eatery) error {
+	// Assuming you have a table `eatery_updates` to log updates
+	query := `
+		UPDATE eateries 
+		SET name = ?, description = ? 
+		WHERE id = ?
+	`
+	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eateryID); err != nil {
+		return fmt.Errorf("update eatery: %w", err)
+	}
+
+	return nil
 }

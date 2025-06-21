@@ -71,18 +71,43 @@ func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error
 
 // PutEateriesEateryId implements schema.ServerInterface.
 func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, params schema.PutEateriesEateryIdParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PutEateriesEateryId endpoint is not implemented yet",
-	})
+	var req schema.EateryCreate
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Failed to bind request: %v", err))
+	}
+	eatery := repository.Eatery{
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
+	}
+	res := schema.Eatery{
+		Id:          eateryId,
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 // GetEateriesEateryIdReviews implements schema.ServerInterface.
 func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.GetEateriesEateryIdReviewsParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "GetEateriesEateryIdReviews endpoint is not implemented yet",
-	})
+	reviews, err := h.repo.GetEateryEateryIDReviews(c.Request().Context(), eateryId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
+
+	res := make([]schema.ReviewDetail, len(reviews))
+	for i, review := range reviews {
+		res[i] = schema.ReviewDetail{
+			Id:       review.Id,
+			EateryId: review.EateryID,
+			AuthorId: review.UserID,
+			Content:  review.Content,
+		}
+	}
+
+	return c.JSON(http.StatusOK, res)
 }
 
 // PostEateriesEateryIdReviews implements schema.ServerInterface.
