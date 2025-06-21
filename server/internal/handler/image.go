@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -16,12 +17,13 @@ func (h *Handler) PostImages(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
-	reader, err := req.Image.Reader()
+	b, err := req.Image.Bytes()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "failed to read image")
+		c.Logger().Errorf("failed to read image bytes: %v", err)
+		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
-	defer reader.Close()
 
+	reader := bytes.NewReader(b)
 	imageID, err := h.repo.UploadImage(c.Request().Context(), reader)
 
 	if err != nil {
