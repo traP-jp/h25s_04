@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { type ReviewSummary } from '../lib/apis'
+import apis from '../lib/apis'
 
 const reviews = ref<ReviewSummary[]>([
   {
@@ -17,7 +18,7 @@ const reviews = ref<ReviewSummary[]>([
 const sort = ref('')
 
 onMounted(async () => {
-  // reviews.value = (await apis.reviewsGet()).data.data ?? []
+  reviews.value = (await apis.reviewsGet()).data.data ?? []
   console.log(reviews.value)
 })
 </script>
