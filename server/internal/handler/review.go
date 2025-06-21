@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
-	"github.com/traP-jp/h25s_04/server/internal/repository"
 	"github.com/traP-jp/h25s_04/server/internal/schema"
 )
 
@@ -21,19 +20,8 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 
 // DeleteReviewsReviewId implements schema.ServerInterface.
 func (h *Handler) DeleteReviewsReviewId(c echo.Context, reviewId types.UUID, params schema.DeleteReviewsReviewIdParams) error {
-	var review schema.ReviewDetail
-	if err := c.Bind(&review); err != nil {
-		return c.JSON(http.StatusBadRequest, fmt.Sprintf("Invalid request body: %v", err))
-	}
 
-	createParams := repository.Review{
-		Id:       reviewId,
-		EateryID: review.EateryId,
-		UserID:   getUserID(params.XForwardedUser),
-		Content:  review.Content,
-	}
-
-	if _, err := h.repo.ReviewExists(c.Request().Context(), createParams); err != nil {
+	if _, err := h.repo.ReviewExists(c.Request().Context(), reviewId); err != nil {
 		return c.JSON(http.StatusNotFound, fmt.Sprintf("Review with ID %s does not exist", reviewId))
 
 	}
