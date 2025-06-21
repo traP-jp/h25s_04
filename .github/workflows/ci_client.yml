@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
       - run: npm ci
         working-directory: client
 
@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
       - run: npm ci
         working-directory: client
       - run: npm run build
@@ -61,7 +61,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
       - run: npm ci
         working-directory: client
       - run: npm run lint:nofix
@@ -79,7 +79,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
       - run: npm ci
         working-directory: client
       - run: npm run format:nofix
@@ -97,7 +97,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
       - run: npm ci
         working-directory: client
       - run: npm run type-check
