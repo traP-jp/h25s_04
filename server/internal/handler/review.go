@@ -29,15 +29,22 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
 	}
 
-	res := make([]schema.ReviewDetail, len(reviews))
+	resData := make([]schema.ReviewDetail, len(reviews))
 	for i, review := range reviews {
-		res[i] = schema.ReviewDetail{
+		resData[i] = schema.ReviewDetail{
 			Id:       review.Id,
 			EateryId: review.EateryID,
 			AuthorId: review.UserID,
 			Content:  review.Content,
 		}
+	}
 
+	res := schema.ReviewDetailListResponse{
+		Data: resData,
+		Pagination: schema.Pagination{
+			Limit: limit,
+			Page:  pages,
+		},
 	}
 
 	return c.JSON(http.StatusOK, res)

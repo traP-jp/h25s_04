@@ -19,13 +19,21 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
 	}
 
-	res := make([]schema.Eatery, len(eateries))
+	resData := make([]schema.Eatery, len(eateries))
 	for i, eatery := range eateries {
-		res[i] = schema.Eatery{
+		resData[i] = schema.Eatery{
 			Id:          types.UUID(eatery.ID),
 			Name:        eatery.Name,
 			Description: eatery.Description,
 		}
+	}
+
+	res := schema.EateryListResponse{
+		Data: resData,
+		Pagination: schema.Pagination{
+			Limit: 10,
+			Page:  1,
+		},
 	}
 	return c.JSON(http.StatusOK, res)
 }
