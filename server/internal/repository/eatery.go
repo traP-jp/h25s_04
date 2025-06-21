@@ -69,9 +69,34 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 	return eatery, nil
 }
 func (r *Repository) PostEateryReview(ctx context.Context, params CreateEateryReviewParams) (uuid.UUID, error) {
+	// パスパラメータから受け取ったeateryIDをparams.EateryIDにセットする場合は、
+	// 呼び出し元のハンドラでパスパラメータを取得し、CreateEateryReviewParamsにセットしてください。
+	// ここ（リポジトリ層）ではパスパラメータの取得は行いません。
+
+	var exists bool
+	if err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM eateries WHERE id = ?)", params.EateryID); err != nil {
+		return uuid.Nil, fmt.Errorf("failed to check eatery existence: %w", err)
+	}
+	if !exists {
+		return uuid.Nil, fmt.Errorf("eatery with that id does not exist")
+	}
+
 	reviewID := uuid.New()
-	if _, err := r.db.ExecContext(ctx, "INSERT INTO reviews (id, eateryid, authorid, content) VALUES (?, ?, ?, ?)", reviewID, params.EateryID, params.UserID, params.Content); err != nil {
+
+	if _, err := r.db.ExecContext(ctx, "INSERT INTO reviews (id, eatery_id, user_id, content) VALUES (?, ?, ?, ?)", reviewID, params.EateryID, params.UserID, params.Content); err != nil {
 		return uuid.Nil, fmt.Errorf("insert eatery review: %w", err)
 	}
 	return reviewID, nil
+}
+
+// Eateryの存在チェック
+func (r *Repository) EateryExists(ctx context.Context, params CreateEateryReviewParams) (uuid.UUID, error) {
+	var exists bool
+	if err := r.db.GetContext(ctx, &exists, "SELECT EXISTS(SELECT 1 FROM eateries WHERE id = ?)", params.EateryID); err != nil {
+		return uuid.Nil, fmt.Errorf("failed to check eatery existence: %w", err)
+	}
+	if !exists {
+		return uuid.Nil, fmt.Errorf("eatery with that id does not exist")
+	}
+	return uuid.Nil, nil
 }

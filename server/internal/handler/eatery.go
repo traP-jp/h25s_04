@@ -95,9 +95,15 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 
 	createParams := repository.CreateEateryReviewParams{
 		ID: uuid.New(),
+		EateryID: uuid.UUID(eateryId),
+	}
+	
+	if _,err := h.repo.EateryExists(c.Request().Context(),createParams); err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Eatery with ID %s not found", eateryId))
 	}
 
 	reviewID, err := h.repo.PostEateryReview(c.Request().Context(), createParams)
+
 	//reviewIDには、リポジトリから返された新しいレビューのIDが入る
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
