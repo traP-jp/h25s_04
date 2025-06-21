@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'client/**'
+      - '.github/workflows/ci_client.yml'
   pull_request:
     branches:
       - main
@@ -18,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -35,8 +34,6 @@ jobs:
       - packages
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -55,8 +52,6 @@ jobs:
       - packages
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -73,8 +68,6 @@ jobs:
       - packages
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -91,8 +84,6 @@ jobs:
       - packages
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: client
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
