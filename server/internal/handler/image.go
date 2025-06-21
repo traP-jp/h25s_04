@@ -23,8 +23,14 @@ func (h *Handler) PostImages(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
+	UploadImage := http.DetectContentType(b)
+	if UploadImage != "image/" {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid file format")
+	}
+
+
 	reader := bytes.NewReader(b)
-	imageID, err := h.repo.UploadImage(c.Request().Context(), reader)
+	imageID, err := h.repo.UploadImage(c.Request().Context(), reader, UploadImage)
 
 	if err != nil {
 		c.Logger().Errorf("failed to upload image: %v", err)

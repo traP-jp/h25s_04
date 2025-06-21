@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid.UUID, error) {
+func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker, contenttype string) (uuid.UUID, error) {
 	imageID := uuid.New()
 	// オブジェクトストレージに画像をアップロードする
 	if _, err := r.client.PutObject(
@@ -25,7 +25,7 @@ func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid
 			Bucket:      aws.String("h25s-04"),
 			Key:         aws.String(imageID.String()),
 			Body:        image,
-			ContentType: aws.String("image/png"),
+			ContentType: aws.String(contenttype),
 		},
 	); err != nil {
 		return uuid.Nil, err
