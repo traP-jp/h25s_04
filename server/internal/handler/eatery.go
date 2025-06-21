@@ -81,7 +81,12 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
 	}
-	return c.NoContent(http.StatusNoContent)
+	res := schema.Eatery{
+		Id:          eateryId,
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 // GetEateriesEateryIdReviews implements schema.ServerInterface.
