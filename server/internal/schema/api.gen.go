@@ -31,7 +31,7 @@ type Eatery struct {
 	CreatedAt time.Time `json:"createdAt"`
 
 	// Description Description of the eatery
-	Description string `json:"description"`
+	Description *string `json:"description,omitempty"`
 
 	// Id Unique identifier for the eatery
 	Id openapi_types.UUID `json:"id"`
@@ -46,7 +46,7 @@ type Eatery struct {
 // EateryCreate defines model for EateryCreate.
 type EateryCreate struct {
 	// Description Description of the eatery
-	Description string `json:"description"`
+	Description *string `json:"description,omitempty"`
 
 	// Name Name of the eatery
 	Name string `json:"name"`
