@@ -25,10 +25,7 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 			Description: eatery.Description,
 		}
 	}
-	// クエリパラメータが空の場合は、全ての飲食店を返す
-	if params.Query == nil {
-		return c.JSON(http.StatusOK, res)
-	}
+
 	// クエリパラメータが指定されている場合は、フィルタリングを行う
 	if params.Query != nil {
 		filteredEateries := make([]schema.Eatery, 0)
@@ -39,6 +36,8 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 		}
 		return c.JSON(http.StatusOK, filteredEateries)
 	}
+
+	// クエリパラメータが空の場合は、全ての飲食店を返す
 	return c.JSON(http.StatusOK, res)
 }
 
