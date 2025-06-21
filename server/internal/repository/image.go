@@ -35,4 +35,4 @@ func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUI
 }
 
 // ファイル本体、Content-Type、エラーを返す
-func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCloser, string, error)
+// func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCloser, string, error)
