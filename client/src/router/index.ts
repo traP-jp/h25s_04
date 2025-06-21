@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const IndexPage = () => import('../pages/TopPage.vue')
 const EateryPage = () => import('../pages/EateryList.vue')
 const NotFound = () => import('../pages/NotFound.vue')
+const Addstore = () => import('../pages/AddStore.vue')
 const RestaurantPage = () => import('../pages/RestaurantOverview.vue')
 
 const routes = [
@@ -20,6 +21,11 @@ const routes = [
     path: '/:path(.*)*',
     name: 'NotFound',
     component: NotFound,
+  },
+  {
+    path: '/eatery/new',
+    name: 'Eatery',
+    component: Addstore,
   },
   {
     path: '/eatery/:eateryId',
