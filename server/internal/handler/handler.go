@@ -13,3 +13,11 @@ func New(repo *repository.Repository) *Handler {
 		repo: repo,
 	}
 }
+
+func getUserID(xForwardedUser *string) string {
+	if xForwardedUser != nil {
+		return *xForwardedUser
+	}
+
+	return "traP"
+}
