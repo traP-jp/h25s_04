@@ -24,36 +24,30 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div :class="$style.reviewsort">
-    <div :class="$style.reviewtitle">最近投稿されたレビュー</div>
+  <div :class="$style.reviewSort">
     <select v-model="sort">
       <option>最新順</option>
       <option>近い順</option>
     </select>
   </div>
-  <div :class="$style.tileview">
+  <div :class="$style.tileView">
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
       <div>
-        <img :class="$style.foodimage" :src="review.imageIds[0]" alt="food" />
+        <img :class="$style.foodImage" :src="review.imageIds[0]" alt="food" />
       </div>
-      <div :class="$style.restaurantname">{{ review.eateryName }}</div>
+      <div :class="$style.restaurantName">{{ review.eateryName }}</div>
       <div :class="$style.username">{{ review.authorId }}</div>
     </div>
   </div>
 </template>
 
 <style lang="scss" module>
-.reviewtitle {
-  font-size: 36px;
-  color: $color-primary-text;
-  text-align: left;
-}
-.reviewsort {
+.reviewSort {
   display: flex;
   flex-basis: auto;
   gap: 2rem;
 }
-.tileview {
+.tileView {
   display: flex;
   flex-wrap: wrap;
   background-color: $color-background;
@@ -75,13 +69,13 @@ onMounted(async () => {
   border-radius: 1rem;
 }
 
-.foodimage {
+.foodImage {
   width: 200px;
   height: 150px;
   object-fit: cover;
 }
 
-.restaurantname {
+.restaurantName {
   line-height: 1;
   font-size: 24px;
   color: $color-text;
