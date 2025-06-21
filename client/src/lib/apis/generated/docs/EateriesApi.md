@@ -81,10 +81,12 @@ const apiInstance = new EateriesApi(configuration);
 
 let eateryId: string; //UUID of the eatery (default to undefined)
 let eateryUpdate: EateryUpdate; //
+let xForwardedUser: string; //ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） (optional) (default to undefined)
 
 const { status, data } = await apiInstance.eateriesEateryIdPut(
     eateryId,
-    eateryUpdate
+    eateryUpdate,
+    xForwardedUser
 );
 ```
 
@@ -94,6 +96,7 @@ const { status, data } = await apiInstance.eateriesEateryIdPut(
 |------------- | ------------- | ------------- | -------------|
 | **eateryUpdate** | **EateryUpdate**|  | |
 | **eateryId** | [**string**] | UUID of the eatery | defaults to undefined|
+| **xForwardedUser** | [**string**] | ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） | (optional) defaults to undefined|
 
 
 ### Return type
@@ -197,9 +200,11 @@ const configuration = new Configuration();
 const apiInstance = new EateriesApi(configuration);
 
 let eateryCreate: EateryCreate; //
+let xForwardedUser: string; //ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） (optional) (default to undefined)
 
 const { status, data } = await apiInstance.eateriesPost(
-    eateryCreate
+    eateryCreate,
+    xForwardedUser
 );
 ```
 
@@ -208,6 +213,7 @@ const { status, data } = await apiInstance.eateriesPost(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **eateryCreate** | **EateryCreate**|  | |
+| **xForwardedUser** | [**string**] | ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与） | (optional) defaults to undefined|
 
 
 ### Return type
