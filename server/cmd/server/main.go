@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -8,6 +10,7 @@ import (
 	"github.com/traP-jp/h25s_04/server/internal/schema"
 	"github.com/traP-jp/h25s_04/server/pkg/config"
 	"github.com/traP-jp/h25s_04/server/pkg/database"
+	"github.com/traP-jp/h25s_04/server/pkg/storage"
 )
 
 func main() {
@@ -29,7 +32,14 @@ func main() {
 	}
 	defer db.Close()
 
-	s := server.Inject(db)
+	storageCfg, storageOptFn, err := config.ObjectStorage(context.Background())
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
+
+	storageClient := storage.Setup(storageCfg, storageOptFn)
+
+	s := server.Inject(db, storageClient)
 	schema.RegisterHandlersWithBaseURL(e, s.Handler, "/api/v1")
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
