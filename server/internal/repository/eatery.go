@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -10,9 +9,9 @@ import (
 
 type (
 	Eatery struct {
-		ID          uuid.UUID      `db:"id"`
-		Name        string         `db:"name"`
-		Description sql.NullString `db:"description"`
+		ID          uuid.UUID `db:"id"`
+		Name        string    `db:"name"`
+		Description *string   `db:"description"`
 	}
 )
 
