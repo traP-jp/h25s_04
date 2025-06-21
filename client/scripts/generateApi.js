@@ -12,7 +12,7 @@ const SWAGGER_PATH = 'schema/openapi.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
 
 const generateCmd = [
-  'docker run --rm -v "$(dirname "$PWD"):/local" -u $(id -u) openapitools/openapi-generator-cli:v7.5.0',
+  'docker run --rm -v "$(dirname "$PWD"):/local" -u $(id -u) openapitools/openapi-generator-cli:v7.13.0',
   'generate',
   '-g',
   'typescript-axios',
