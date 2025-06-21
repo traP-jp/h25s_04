@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -19,10 +20,20 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 
 // DeleteReviewsReviewId implements schema.ServerInterface.
 func (h *Handler) DeleteReviewsReviewId(c echo.Context, reviewId types.UUID, params schema.DeleteReviewsReviewIdParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "DeleteReviewsReviewId endpoint is not implemented yet",
-	})
+
+	if _, err := h.repo.ReviewExists(c.Request().Context(), reviewId); err != nil {
+		return c.JSON(http.StatusNotFound, fmt.Sprintf("Review with ID %s does not exist", reviewId))
+
+	}
+	if err := h.repo.DeleteReview(c.Request().Context(), reviewId); err != nil {
+		return c.JSON(http.StatusInternalServerError, schema.Error{
+			Code:  "INTERNAL_SERVER_ERROR",
+			Error: "Failed to delete review",
+		})
+	}
+
+	return c.JSON(http.StatusOK, "Review deleted successfully")
+
 }
 
 // GetReviewsReviewId implements schema.ServerInterface.
