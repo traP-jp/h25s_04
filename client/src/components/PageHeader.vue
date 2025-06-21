@@ -4,11 +4,13 @@ import PrimaryButton from './PrimaryButton.vue'
 
 <template>
   <header :class="$style.header">
-    <div>aaaa</div>
+    <RouterLink to="/"><div>aaaa</div></RouterLink>
     <div>タイトル</div>
     <div class="buttons">
-      <primary-button :text="'お店一覧'" />
-      <primary-button :text="'新規投稿'" />
+      <RouterLink to="/eatery"><PrimaryButton :text="'お店一覧'" /></RouterLink>
+      <RouterLink to="/eatery/new"
+        ><PrimaryButton :text="'新規投稿'"
+      /></RouterLink>
     </div>
   </header>
 </template>
