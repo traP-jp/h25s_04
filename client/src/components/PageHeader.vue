@@ -7,7 +7,7 @@ import SecondaryButton from './SecondaryButton.vue'
   <header :class="$style.header">
     <div>aaaa</div>
     <div>タイトル</div>
-    <div class="buttons">
+    <div>
       <primary-button></primary-button>
       <secondary-button></secondary-button>
     </div>
