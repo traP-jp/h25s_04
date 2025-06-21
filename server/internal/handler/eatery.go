@@ -20,7 +20,7 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 }
 
 // PostEateries implements schema.ServerInterface.
-func (h *Handler) PostEateries(c echo.Context, params schema.GetEateriesParams) error {
+func (h *Handler) PostEateries(c echo.Context, params schema.PostEateriesParams) error {
 	var req schema.EateryCreate
 	if err := c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
