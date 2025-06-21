@@ -17,7 +17,7 @@ type (
 
 	CreateEateryParams struct {
 		Name        string
-		Description string
+		Description *string
 	}
 )
 
