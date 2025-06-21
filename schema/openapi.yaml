@@ -68,6 +68,8 @@ paths:
     post:
       summary: Create a new eatery
       description: Creates a new eatery
+      parameters:
+        - $ref: '#/components/parameters/X-Forwarded-User'
       tags:
         - Eateries
       requestBody:
@@ -143,6 +145,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/X-Forwarded-User'
       requestBody:
         required: true
         content:
@@ -254,6 +257,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/X-Forwarded-User'
       requestBody:
         required: true
         content:
@@ -386,6 +390,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/X-Forwarded-User'
       requestBody:
         required: true
         content:
@@ -431,6 +436,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/X-Forwarded-User'
       responses:
         '204':
           description: Review deleted successfully
@@ -534,6 +540,13 @@ paths:
                 $ref: '#/components/schemas/Error'
 
 components:
+  parameters:
+    X-Forwarded-User:
+      name: X-Forwarded-User
+      in: header
+      description: ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
+      schema:
+        type: string
   schemas:
     Eatery:
       type: object
@@ -559,7 +572,6 @@ components:
       required:
         - id
         - name
-        - description
         - createdAt
         - updatedAt
 
@@ -578,7 +590,6 @@ components:
           maxLength: 1000
       required:
         - name
-        - description
 
     EateryUpdate:
       type: object

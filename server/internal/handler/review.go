@@ -18,7 +18,7 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 }
 
 // DeleteReviewsReviewId implements schema.ServerInterface.
-func (h *Handler) DeleteReviewsReviewId(c echo.Context, reviewId types.UUID) error {
+func (h *Handler) DeleteReviewsReviewId(c echo.Context, reviewId types.UUID, params schema.DeleteReviewsReviewIdParams) error {
 	return c.JSON(http.StatusNotImplemented, schema.Error{
 		Code:  "NOT_IMPLEMENTED",
 		Error: "DeleteReviewsReviewId endpoint is not implemented yet",
@@ -34,7 +34,7 @@ func (h *Handler) GetReviewsReviewId(c echo.Context, reviewId types.UUID) error 
 }
 
 // PutReviewsReviewId implements schema.ServerInterface.
-func (h *Handler) PutReviewsReviewId(c echo.Context, reviewId types.UUID) error {
+func (h *Handler) PutReviewsReviewId(c echo.Context, reviewId types.UUID, params schema.PutReviewsReviewIdParams) error {
 	return c.JSON(http.StatusNotImplemented, schema.Error{
 		Code:  "NOT_IMPLEMENTED",
 		Error: "PutReviewsReviewId endpoint is not implemented yet",
