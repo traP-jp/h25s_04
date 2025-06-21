@@ -1,50 +1,49 @@
 <template>
-  <div class="honbun">
+  <main class="inputMenu">
     <div>
       <div>
-       <span style="color: #000000">店名</span>
-       <input
-         v-model="message1"
-         class="nyuuryoku4"
-         type="text"
-         placeholder="入力"
-       />
+        <span style="color: #000000">店名</span>
+        <input
+          v-model="storeName"
+          class="input"
+          type="text"
+          placeholder="入力"
+        />
       </div>
       <div>
-       <span style="color: #000000">説明</span>
-       <input
-         v-model="message2"
-         class="nyuuryoku4"
-         type="text"
-         placeholder="入力"
-       />
+        <span style="color: #000000">説明</span>
+        <input
+          v-model="description"
+          class="input"
+          type="text"
+          placeholder="入力"
+        />
       </div>
       <div>
-       <input
-         v-model="message3"
-         class="nyuuryoku4"
-         type="text"
-         placeholder="入力"
-       />
+        <input
+          v-model="message3"
+          class="input"
+          type="text"
+          placeholder="入力"
+        />
       </div>
       <div>
-       <span style="color: #000000">住所／座標</span>
-       <input
-         v-model="message4"
-         class="nyuuryoku4"
-         type="text"
-         placeholder="入力"
-       />
+        <span style="color: #000000">住所／座標</span>
+        <input
+          v-model="address"
+          class="input"
+          type="text"
+          placeholder="入力"
+        />
       </div>
       <div>
-       <span style="color: #000000">レビュー本文</span>
-       <textarea
-         v-model="inputText"
-         class="nyuuryoku4"
-         rows="5"
-         placeholder="入力"
-       ></textarea
-       >
+        <span style="color: #000000">レビュー本文</span>
+        <textarea
+          v-model="reviewContent"
+          class="input"
+          rows="5"
+          placeholder="入力"
+        ></textarea>
       </div>
       <span style="color: #000000">お店の写真</span
       ><input
@@ -54,27 +53,27 @@
       />
     </div>
     <div>
-      <post-button></post-button>
+      <PrimaryButton  :text="'投稿'"/>
     </div>
-  </div>
+  </main>
 </template>
 
 <script lang="ts" setup>
-import PostButton from './PostButton.vue'
+import PrimaryButton from '../components/PrimaryButton.vue'
 import { ref } from 'vue'
 
-const message1 = ref('')
-const message2 = ref('')
+const storeName = ref('')
+const description = ref('')
 const message3 = ref('')
-const message4 = ref('')
-const inputText = ref('')
+const address = ref('')
+const reviewContent = ref('')
 </script>
 
 <style>
-.honbun {
+.inputMenu {
   background-color: #ffffff;
 }
-.nyuuryoku4{
+.input {
   color: #000000;
   background-color: #ffffff;
   border: 1px solid #b2bbc7;
