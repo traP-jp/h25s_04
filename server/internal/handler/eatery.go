@@ -100,8 +100,8 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 	for i, review := range reviews {
 		res[i] = schema.ReviewDetail{
 			Id:       review.Id,
-			EateryId: review.EateryId,
-			AuthorId: review.AuthorId,
+			EateryId: review.EateryID,
+			AuthorId: review.UserID,
 			Content:  review.Content,
 		}
 	}

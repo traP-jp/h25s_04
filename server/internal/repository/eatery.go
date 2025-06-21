@@ -19,13 +19,6 @@ type (
 		Name        string
 		Description *string
 	}
-
-	ReviewDetail struct {
-		Id       uuid.UUID
-		EateryId uuid.UUID
-		AuthorId string
-		Content  string
-	}
 )
 
 func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesParams) ([]*Eatery, error) {
@@ -60,15 +53,6 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 	}
 
 	return eatery, nil
-}
-
-func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid.UUID) ([]*ReviewDetail, error) {
-	reviews := []*ReviewDetail{}
-	if err := r.db.SelectContext(ctx, reviews, "SELECT * FROM reviews WHERE eatery_id = ?", eateryID); err != nil {
-		return nil, fmt.Errorf("select eatery: %w", err)
-	}
-
-	return reviews, nil
 }
 
 func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eatery Eatery) error {
