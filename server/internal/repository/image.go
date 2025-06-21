@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"io"
 
 	"github.com/google/uuid"
@@ -13,8 +14,8 @@ type (
 	}
 )
 
-func (r *Repository) UploadImage(reviewID uuid.UUID, image io.Reader) (uuid.UUID, error) {
+func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUID, error) {
 	imageID := uuid.New()
-	// オブジェクトストレージへにアップロードし、データベースにimageIDとreviewIDを保存する
+	// オブジェクトストレージに画像をアップロードする
 	return imageID, nil
 }
