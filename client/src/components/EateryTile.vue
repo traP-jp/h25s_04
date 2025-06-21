@@ -1,5 +1,18 @@
+<script setup>
+import {ref} from 'vue'
+
+const sort = ref('')
+
+</script>
+
 <template>
-    <div :class="$style.reviewtitle">最近投稿されたレビュー</div>
+    <div :class="$style.reviewsort">
+        <div :class="$style.reviewtitle">最近投稿されたレビュー</div>
+        <select v-model="sort">
+            <option>最新順</option>
+            <option>近い順</option>
+        </select>
+    </div>
     <div :class="$style.tileview">
         <div :class="$style.tile">
             <div>
@@ -16,6 +29,11 @@
     font-size: 36px;
     color: $color-primary-text;
     text-align: left;
+  }
+  .reviewsort {
+    display: flex;
+    flex-basis: auto;
+    gap: 2rem;
   }
   .tileview {
     display: flex;
