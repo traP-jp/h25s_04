@@ -37,7 +37,7 @@ func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUI
 // ファイル本体、Content-Type、エラーを返す
 func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCloser, string, error) {
 	result, err := r.client.GetObject(
-		context.TODO(),
+		ctx,
 		&s3.GetObjectInput{
 			Bucket: aws.String("h25s-04"),
 			Key: aws.String(imageID.String()),
