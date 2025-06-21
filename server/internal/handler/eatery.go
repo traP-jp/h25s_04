@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
@@ -111,8 +112,35 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 
 // PostEateriesEateryIdReviews implements schema.ServerInterface.
 func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.PostEateriesEateryIdReviewsParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PostEateriesEateryIdReviews endpoint is not implemented yet",
-	})
+	var req schema.ReviewDetail
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
+	}
+
+	createParams := repository.CreateEateryReviewParams{
+		ID:       uuid.New(),
+		EateryID: uuid.UUID(eateryId),
+		Content:  req.Content,
+		UserID:   getUserID(params.XForwardedUser),
+	}
+
+	if _, err := h.repo.EateryExists(c.Request().Context(), createParams); err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Eatery with ID %s not found", eateryId))
+	}
+
+	reviewID, err := h.repo.PostEateryReview(c.Request().Context(), createParams)
+	userID := getUserID(params.XForwardedUser)
+	//reviewIDには、リポジトリから返された新しいレビューのIDが入る
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
+	}
+
+	res := schema.ReviewDetail{
+		Id:       reviewID,
+		Content:  req.Content,
+		EateryId: eateryId,
+		AuthorId: userID,
+	}
+
+	return c.JSON(http.StatusOK, res)
 }
