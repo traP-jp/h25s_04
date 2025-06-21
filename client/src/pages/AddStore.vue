@@ -29,12 +29,7 @@
       </div>
       <div>
         <span style="color: #000000">住所／座標</span>
-        <input
-          v-model="address"
-          class="input"
-          type="text"
-          placeholder="入力"
-        />
+        <input v-model="address" class="input" type="text" placeholder="入力" />
       </div>
       <div>
         <span style="color: #000000">レビュー本文</span>
@@ -53,7 +48,7 @@
       />
     </div>
     <div>
-      <PrimaryButton  :text="'投稿'"/>
+      <PrimaryButton :text="'投稿'" />
     </div>
   </main>
 </template>
