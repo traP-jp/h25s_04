@@ -1,6 +1,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+interface Review {
+  pic: string
+  username: string
+  restaurant: string
+  id: number
+}
+
+const reviews = ref<Review[]>([
+  {
+    pic: 'https://q.trap.jp/api/v3/public/icon/Pugma',
+    restaurant: 'ぷぐま',
+    username: '偉大な先輩',
+    id: 0,
+  },
+])
 const sort = ref('')
 </script>
 
@@ -13,16 +28,12 @@ const sort = ref('')
     </select>
   </div>
   <div :class="$style.tileview">
-    <div :class="$style.tile">
+    <div v-for="review in reviews" :key="review.id" :class="$style.tile">
       <div>
-        <img
-          :class="$style.foodimage"
-          src="https://q.trap.jp/api/v3/public/icon/Pugma"
-          alt="food"
-        />
+        <img :class="$style.foodimage" :src="review.pic" alt="food" />
       </div>
-      <div :class="$style.restaurantname">ぷぐま</div>
-      <div :class="$style.username">偉大な先輩</div>
+      <div :class="$style.restaurantname">{{ review.restaurant }}</div>
+      <div :class="$style.username">{{ review.username }}</div>
     </div>
   </div>
 </template>
