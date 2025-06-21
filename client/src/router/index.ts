@@ -22,10 +22,10 @@ const routes = [
     component: NotFound,
   },
   {
-    path: '/eataly/:eateryid',
+    path: '/eatery/:eateryId',
     name: 'RestaurantOverview',
     component: RestaurantPage,
-  }
+  },
 ]
 
 export default createRouter({

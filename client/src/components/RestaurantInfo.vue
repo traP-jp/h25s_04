@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import apis, { type Eatery } from '../lib/apis'
+import useParam from '../lib/param'
+
+const eateryId = useParam('eateryId')
 
 interface Restaurant {
   name: string
@@ -11,6 +15,11 @@ const shopDetail = ref<Restaurant>({
   name: 'ぷぐま',
   description: '普通です',
   id: 0,
+})
+
+const eateryDetail = ref<Eatery>()
+onMounted(async () => {
+  eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId.value)).data
 })
 </script>
 
@@ -36,6 +45,6 @@ const shopDetail = ref<Restaurant>({
 }
 .review div {
   font-size: 32px;
-  color: $color-text
+  color: $color-text;
 }
 </style>
