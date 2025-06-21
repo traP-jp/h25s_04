@@ -1,6 +1,11 @@
 package repository
 
-import "github.com/google/uuid"
+import (
+	"context"
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type (
 	Review struct {
@@ -10,3 +15,12 @@ type (
 		Content  string    `db:"content"`
 	}
 )
+
+func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid.UUID) ([]*Review, error) {
+	reviews := []*Review{}
+	if err := r.db.SelectContext(ctx, &reviews, "SELECT * FROM reviews WHERE eatery_id = ?", eateryID); err != nil {
+		return nil, fmt.Errorf("select eatery: %w", err)
+	}
+
+	return reviews, nil
+}
