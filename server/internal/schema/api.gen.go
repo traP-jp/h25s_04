@@ -52,6 +52,12 @@ type EateryCreate struct {
 	Name string `json:"name"`
 }
 
+// EateryListResponse defines model for EateryListResponse.
+type EateryListResponse struct {
+	Data       []Eatery   `json:"data"`
+	Pagination Pagination `json:"pagination"`
+}
+
 // EateryUpdate defines model for EateryUpdate.
 type EateryUpdate struct {
 	// Description Description of the eatery
@@ -134,6 +140,18 @@ type ReviewDetail struct {
 
 	// UpdatedAt Last update timestamp
 	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+// ReviewDetailListResponse defines model for ReviewDetailListResponse.
+type ReviewDetailListResponse struct {
+	Data       []ReviewDetail `json:"data"`
+	Pagination Pagination     `json:"pagination"`
+}
+
+// ReviewListResponse defines model for ReviewListResponse.
+type ReviewListResponse struct {
+	Data       []ReviewSummary `json:"data"`
+	Pagination Pagination      `json:"pagination"`
 }
 
 // ReviewSummary Summary of a review for list views (without full content)
