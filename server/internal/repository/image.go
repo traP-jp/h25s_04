@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func (r *Repository) UploadImage(ctx context.Context, image io.Reader) (uuid.UUID, error) {
+func (r *Repository) UploadImage(ctx context.Context, image io.ReadSeeker) (uuid.UUID, error) {
 	imageID := uuid.New()
 	// オブジェクトストレージに画像をアップロードする
 	if _, err := r.client.PutObject(
@@ -40,12 +40,12 @@ func (r *Repository) GetImage(ctx context.Context, imageID uuid.UUID) (io.ReadCl
 		ctx,
 		&s3.GetObjectInput{
 			Bucket: aws.String("h25s-04"),
-			Key: aws.String(imageID.String()),
+			Key:    aws.String(imageID.String()),
 		},
 	)
 	if err != nil {
 		return nil, "", err
 	}
-	
+
 	return result.Body, *result.ContentType, nil
 }
