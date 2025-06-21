@@ -92,7 +92,17 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 
 // GetEateriesEateryIdReviews implements schema.ServerInterface.
 func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.GetEateriesEateryIdReviewsParams) error {
-	reviews, err := h.repo.GetEateryEateryIDReviews(c.Request().Context(), eateryId)
+	limit := 10 // Default limit
+	if params.Limit != nil {
+		limit = *params.Limit
+	}
+	pages := 1 // Default page
+	if params.Page != nil {
+		pages = *params.Page
+	}
+	offset := (pages - 1) * limit
+
+	reviews, err := h.repo.GetEateryEateryIDReviews(c.Request().Context(), uuid.UUID(eateryId), limit, offset)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
 	}
@@ -105,6 +115,7 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 			AuthorId: review.UserID,
 			Content:  review.Content,
 		}
+
 	}
 
 	return c.JSON(http.StatusOK, res)
