@@ -40,8 +40,13 @@ func (h *Handler) PostImages(c echo.Context) error {
 
 // GetImagesImageId implements schema.ServerInterface.
 func (h *Handler) GetImagesImageId(c echo.Context, imageId types.UUID) error {
-	// image, contentType, err := h.repo.GetImage(c.Request().Context(), imageId)
+	image, contentType, err := h.repo.GetImage(c.Request().Context(), imageId)
+	if err != nil {
+		c.Logger().Errorf("failed to download image: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
 
-	// TODO: 画像の適切な返し方を調べてみてください
-	return nil
+	defer image.Close()
+
+	return c.Stream(http.StatusOK, contentType, image)
 }
