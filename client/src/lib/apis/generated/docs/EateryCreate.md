@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **string** | Name of the eatery | [default to undefined]
-**description** | **string** | Description of the eatery | [default to undefined]
+**description** | **string** | Description of the eatery | [optional] [default to undefined]
 
 ## Example
 

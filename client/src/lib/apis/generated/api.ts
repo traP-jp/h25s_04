@@ -84,7 +84,7 @@ export interface Eatery {
      * @type {string}
      * @memberof Eatery
      */
-    'description': string;
+    'description'?: string;
     /**
      * Creation timestamp
      * @type {string}
@@ -115,7 +115,7 @@ export interface EateryCreate {
      * @type {string}
      * @memberof EateryCreate
      */
-    'description': string;
+    'description'?: string;
 }
 /**
  * 
@@ -411,10 +411,11 @@ export const EateriesApiAxiosParamCreator = function (configuration?: Configurat
          * @summary Update eatery
          * @param {string} eateryId UUID of the eatery
          * @param {EateryUpdate} eateryUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesEateryIdPut: async (eateryId: string, eateryUpdate: EateryUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        eateriesEateryIdPut: async (eateryId: string, eateryUpdate: EateryUpdate, xForwardedUser?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'eateryId' is not null or undefined
             assertParamExists('eateriesEateryIdPut', 'eateryId', eateryId)
             // verify required parameter 'eateryUpdate' is not null or undefined
@@ -436,6 +437,9 @@ export const EateriesApiAxiosParamCreator = function (configuration?: Configurat
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (xForwardedUser != null) {
+                localVarHeaderParameter['X-Forwarded-User'] = String(xForwardedUser);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -495,10 +499,11 @@ export const EateriesApiAxiosParamCreator = function (configuration?: Configurat
          * Creates a new eatery
          * @summary Create a new eatery
          * @param {EateryCreate} eateryCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesPost: async (eateryCreate: EateryCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        eateriesPost: async (eateryCreate: EateryCreate, xForwardedUser?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'eateryCreate' is not null or undefined
             assertParamExists('eateriesPost', 'eateryCreate', eateryCreate)
             const localVarPath = `/eateries`;
@@ -517,6 +522,9 @@ export const EateriesApiAxiosParamCreator = function (configuration?: Configurat
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (xForwardedUser != null) {
+                localVarHeaderParameter['X-Forwarded-User'] = String(xForwardedUser);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -555,11 +563,12 @@ export const EateriesApiFp = function(configuration?: Configuration) {
          * @summary Update eatery
          * @param {string} eateryId UUID of the eatery
          * @param {EateryUpdate} eateryUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Eatery>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesEateryIdPut(eateryId, eateryUpdate, options);
+        async eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Eatery>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesEateryIdPut(eateryId, eateryUpdate, xForwardedUser, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EateriesApi.eateriesEateryIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -583,11 +592,12 @@ export const EateriesApiFp = function(configuration?: Configuration) {
          * Creates a new eatery
          * @summary Create a new eatery
          * @param {EateryCreate} eateryCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eateriesPost(eateryCreate: EateryCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Eatery>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesPost(eateryCreate, options);
+        async eateriesPost(eateryCreate: EateryCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Eatery>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesPost(eateryCreate, xForwardedUser, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EateriesApi.eateriesPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -617,11 +627,12 @@ export const EateriesApiFactory = function (configuration?: Configuration, baseP
          * @summary Update eatery
          * @param {string} eateryId UUID of the eatery
          * @param {EateryUpdate} eateryUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, options?: RawAxiosRequestConfig): AxiosPromise<Eatery> {
-            return localVarFp.eateriesEateryIdPut(eateryId, eateryUpdate, options).then((request) => request(axios, basePath));
+        eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig): AxiosPromise<Eatery> {
+            return localVarFp.eateriesEateryIdPut(eateryId, eateryUpdate, xForwardedUser, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns a list of all eateries with optional query filtering
@@ -639,11 +650,12 @@ export const EateriesApiFactory = function (configuration?: Configuration, baseP
          * Creates a new eatery
          * @summary Create a new eatery
          * @param {EateryCreate} eateryCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesPost(eateryCreate: EateryCreate, options?: RawAxiosRequestConfig): AxiosPromise<Eatery> {
-            return localVarFp.eateriesPost(eateryCreate, options).then((request) => request(axios, basePath));
+        eateriesPost(eateryCreate: EateryCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig): AxiosPromise<Eatery> {
+            return localVarFp.eateriesPost(eateryCreate, xForwardedUser, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -672,12 +684,13 @@ export class EateriesApi extends BaseAPI {
      * @summary Update eatery
      * @param {string} eateryId UUID of the eatery
      * @param {EateryUpdate} eateryUpdate 
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EateriesApi
      */
-    public eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, options?: RawAxiosRequestConfig) {
-        return EateriesApiFp(this.configuration).eateriesEateryIdPut(eateryId, eateryUpdate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return EateriesApiFp(this.configuration).eateriesEateryIdPut(eateryId, eateryUpdate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -698,12 +711,13 @@ export class EateriesApi extends BaseAPI {
      * Creates a new eatery
      * @summary Create a new eatery
      * @param {EateryCreate} eateryCreate 
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EateriesApi
      */
-    public eateriesPost(eateryCreate: EateryCreate, options?: RawAxiosRequestConfig) {
-        return EateriesApiFp(this.configuration).eateriesPost(eateryCreate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesPost(eateryCreate: EateryCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return EateriesApiFp(this.configuration).eateriesPost(eateryCreate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -953,10 +967,11 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create a review for an eatery
          * @param {string} eateryId UUID of the eatery
          * @param {ReviewCreate} reviewCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesEateryIdReviewsPost: async (eateryId: string, reviewCreate: ReviewCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        eateriesEateryIdReviewsPost: async (eateryId: string, reviewCreate: ReviewCreate, xForwardedUser?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'eateryId' is not null or undefined
             assertParamExists('eateriesEateryIdReviewsPost', 'eateryId', eateryId)
             // verify required parameter 'reviewCreate' is not null or undefined
@@ -978,6 +993,9 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (xForwardedUser != null) {
+                localVarHeaderParameter['X-Forwarded-User'] = String(xForwardedUser);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1037,10 +1055,11 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
          * Deletes a specific review
          * @summary Delete review
          * @param {string} reviewId UUID of the review
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewsReviewIdDelete: async (reviewId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        reviewsReviewIdDelete: async (reviewId: string, xForwardedUser?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'reviewId' is not null or undefined
             assertParamExists('reviewsReviewIdDelete', 'reviewId', reviewId)
             const localVarPath = `/reviews/{reviewId}`
@@ -1058,6 +1077,9 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            if (xForwardedUser != null) {
+                localVarHeaderParameter['X-Forwarded-User'] = String(xForwardedUser);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1106,10 +1128,11 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Update review
          * @param {string} reviewId UUID of the review
          * @param {ReviewUpdate} reviewUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewsReviewIdPut: async (reviewId: string, reviewUpdate: ReviewUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        reviewsReviewIdPut: async (reviewId: string, reviewUpdate: ReviewUpdate, xForwardedUser?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'reviewId' is not null or undefined
             assertParamExists('reviewsReviewIdPut', 'reviewId', reviewId)
             // verify required parameter 'reviewUpdate' is not null or undefined
@@ -1131,6 +1154,9 @@ export const ReviewsApiAxiosParamCreator = function (configuration?: Configurati
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
+            if (xForwardedUser != null) {
+                localVarHeaderParameter['X-Forwarded-User'] = String(xForwardedUser);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1172,11 +1198,12 @@ export const ReviewsApiFp = function(configuration?: Configuration) {
          * @summary Create a review for an eatery
          * @param {string} eateryId UUID of the eatery
          * @param {ReviewCreate} reviewCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesEateryIdReviewsPost(eateryId, reviewCreate, options);
+        async eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesEateryIdReviewsPost(eateryId, reviewCreate, xForwardedUser, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewsApi.eateriesEateryIdReviewsPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1200,11 +1227,12 @@ export const ReviewsApiFp = function(configuration?: Configuration) {
          * Deletes a specific review
          * @summary Delete review
          * @param {string} reviewId UUID of the review
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reviewsReviewIdDelete(reviewId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.reviewsReviewIdDelete(reviewId, options);
+        async reviewsReviewIdDelete(reviewId: string, xForwardedUser?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reviewsReviewIdDelete(reviewId, xForwardedUser, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewsApi.reviewsReviewIdDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1227,11 +1255,12 @@ export const ReviewsApiFp = function(configuration?: Configuration) {
          * @summary Update review
          * @param {string} reviewId UUID of the review
          * @param {ReviewUpdate} reviewUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.reviewsReviewIdPut(reviewId, reviewUpdate, options);
+        async reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reviewsReviewIdPut(reviewId, reviewUpdate, xForwardedUser, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewsApi.reviewsReviewIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1264,11 +1293,12 @@ export const ReviewsApiFactory = function (configuration?: Configuration, basePa
          * @summary Create a review for an eatery
          * @param {string} eateryId UUID of the eatery
          * @param {ReviewCreate} reviewCreate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, options?: RawAxiosRequestConfig): AxiosPromise<ReviewDetail> {
-            return localVarFp.eateriesEateryIdReviewsPost(eateryId, reviewCreate, options).then((request) => request(axios, basePath));
+        eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig): AxiosPromise<ReviewDetail> {
+            return localVarFp.eateriesEateryIdReviewsPost(eateryId, reviewCreate, xForwardedUser, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns a list of all reviews across all eateries with images only, optimized for the top page
@@ -1286,11 +1316,12 @@ export const ReviewsApiFactory = function (configuration?: Configuration, basePa
          * Deletes a specific review
          * @summary Delete review
          * @param {string} reviewId UUID of the review
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewsReviewIdDelete(reviewId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.reviewsReviewIdDelete(reviewId, options).then((request) => request(axios, basePath));
+        reviewsReviewIdDelete(reviewId: string, xForwardedUser?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.reviewsReviewIdDelete(reviewId, xForwardedUser, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns detailed information about a specific review
@@ -1307,11 +1338,12 @@ export const ReviewsApiFactory = function (configuration?: Configuration, basePa
          * @summary Update review
          * @param {string} reviewId UUID of the review
          * @param {ReviewUpdate} reviewUpdate 
+         * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, options?: RawAxiosRequestConfig): AxiosPromise<ReviewDetail> {
-            return localVarFp.reviewsReviewIdPut(reviewId, reviewUpdate, options).then((request) => request(axios, basePath));
+        reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig): AxiosPromise<ReviewDetail> {
+            return localVarFp.reviewsReviewIdPut(reviewId, reviewUpdate, xForwardedUser, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1343,12 +1375,13 @@ export class ReviewsApi extends BaseAPI {
      * @summary Create a review for an eatery
      * @param {string} eateryId UUID of the eatery
      * @param {ReviewCreate} reviewCreate 
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).eateriesEateryIdReviewsPost(eateryId, reviewCreate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).eateriesEateryIdReviewsPost(eateryId, reviewCreate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1369,12 +1402,13 @@ export class ReviewsApi extends BaseAPI {
      * Deletes a specific review
      * @summary Delete review
      * @param {string} reviewId UUID of the review
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public reviewsReviewIdDelete(reviewId: string, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).reviewsReviewIdDelete(reviewId, options).then((request) => request(this.axios, this.basePath));
+    public reviewsReviewIdDelete(reviewId: string, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).reviewsReviewIdDelete(reviewId, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1394,12 +1428,13 @@ export class ReviewsApi extends BaseAPI {
      * @summary Update review
      * @param {string} reviewId UUID of the review
      * @param {ReviewUpdate} reviewUpdate 
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).reviewsReviewIdPut(reviewId, reviewUpdate, options).then((request) => request(this.axios, this.basePath));
+    public reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).reviewsReviewIdPut(reviewId, reviewUpdate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1438,12 +1473,13 @@ export class Apis extends BaseAPI {
      * @summary Update eatery
      * @param {string} eateryId UUID of the eatery
      * @param {EateryUpdate} eateryUpdate
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EateriesApi
      */
-    public eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, options?: RawAxiosRequestConfig) {
-        return EateriesApiFp(this.configuration).eateriesEateryIdPut(eateryId, eateryUpdate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesEateryIdPut(eateryId: string, eateryUpdate: EateryUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return EateriesApiFp(this.configuration).eateriesEateryIdPut(eateryId, eateryUpdate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1464,12 +1500,13 @@ export class Apis extends BaseAPI {
      * Creates a new eatery
      * @summary Create a new eatery
      * @param {EateryCreate} eateryCreate
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EateriesApi
      */
-    public eateriesPost(eateryCreate: EateryCreate, options?: RawAxiosRequestConfig) {
-        return EateriesApiFp(this.configuration).eateriesPost(eateryCreate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesPost(eateryCreate: EateryCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return EateriesApiFp(this.configuration).eateriesPost(eateryCreate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1516,12 +1553,13 @@ export class Apis extends BaseAPI {
      * @summary Create a review for an eatery
      * @param {string} eateryId UUID of the eatery
      * @param {ReviewCreate} reviewCreate
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).eateriesEateryIdReviewsPost(eateryId, reviewCreate, options).then((request) => request(this.axios, this.basePath));
+    public eateriesEateryIdReviewsPost(eateryId: string, reviewCreate: ReviewCreate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).eateriesEateryIdReviewsPost(eateryId, reviewCreate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1542,12 +1580,13 @@ export class Apis extends BaseAPI {
      * Deletes a specific review
      * @summary Delete review
      * @param {string} reviewId UUID of the review
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public reviewsReviewIdDelete(reviewId: string, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).reviewsReviewIdDelete(reviewId, options).then((request) => request(this.axios, this.basePath));
+    public reviewsReviewIdDelete(reviewId: string, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).reviewsReviewIdDelete(reviewId, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1567,11 +1606,12 @@ export class Apis extends BaseAPI {
      * @summary Update review
      * @param {string} reviewId UUID of the review
      * @param {ReviewUpdate} reviewUpdate
+     * @param {string} [xForwardedUser] ログインしているユーザーのtraQ ID（NeoShowcaseが自動で付与）
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReviewsApi
      */
-    public reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, options?: RawAxiosRequestConfig) {
-        return ReviewsApiFp(this.configuration).reviewsReviewIdPut(reviewId, reviewUpdate, options).then((request) => request(this.axios, this.basePath));
+    public reviewsReviewIdPut(reviewId: string, reviewUpdate: ReviewUpdate, xForwardedUser?: string, options?: RawAxiosRequestConfig) {
+        return ReviewsApiFp(this.configuration).reviewsReviewIdPut(reviewId, reviewUpdate, xForwardedUser, options).then((request) => request(this.axios, this.basePath));
     }
 }

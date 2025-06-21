@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
@@ -20,13 +19,21 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
 	}
 
-	res := make([]schema.Eatery, len(eateries))
+	resData := make([]schema.Eatery, len(eateries))
 	for i, eatery := range eateries {
-		res[i] = schema.Eatery{
+		resData[i] = schema.Eatery{
 			Id:          types.UUID(eatery.ID),
 			Name:        eatery.Name,
 			Description: eatery.Description,
 		}
+	}
+
+	res := schema.EateryListResponse{
+		Data: resData,
+		Pagination: schema.Pagination{
+			Limit: 10,
+			Page:  1,
+		},
 	}
 	return c.JSON(http.StatusOK, res)
 }
@@ -87,71 +94,5 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 		Name:        req.Name,
 		Description: req.Description,
 	}
-	return c.JSON(http.StatusOK, res)
-}
-
-// GetEateriesEateryIdReviews implements schema.ServerInterface.
-func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.GetEateriesEateryIdReviewsParams) error {
-	limit := 10 // Default limit
-	if params.Limit != nil {
-		limit = *params.Limit
-	}
-	pages := 1 // Default page
-	if params.Page != nil {
-		pages = *params.Page
-	}
-	offset := (pages - 1) * limit
-
-	reviews, err := h.repo.GetEateryEateryIDReviews(c.Request().Context(), uuid.UUID(eateryId), limit, offset)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
-	}
-
-	res := make([]schema.ReviewDetail, len(reviews))
-	for i, review := range reviews {
-		res[i] = schema.ReviewDetail{
-			Id:       review.Id,
-			EateryId: review.EateryID,
-			AuthorId: review.UserID,
-			Content:  review.Content,
-		}
-
-	}
-
-	return c.JSON(http.StatusOK, res)
-}
-
-// PostEateriesEateryIdReviews implements schema.ServerInterface.
-func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUID, params schema.PostEateriesEateryIdReviewsParams) error {
-	var req schema.ReviewDetail
-	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
-	}
-
-	createParams := repository.CreateEateryReviewParams{
-		ID:       uuid.New(),
-		EateryID: uuid.UUID(eateryId),
-		Content:  req.Content,
-		UserID:   getUserID(params.XForwardedUser),
-	}
-
-	if _, err := h.repo.EateryExists(c.Request().Context(), createParams); err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Eatery with ID %s not found", eateryId))
-	}
-
-	reviewID, err := h.repo.PostEateryReview(c.Request().Context(), createParams)
-	userID := getUserID(params.XForwardedUser)
-	//reviewIDには、リポジトリから返された新しいレビューのIDが入る
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
-	}
-
-	res := schema.ReviewDetail{
-		Id:       reviewID,
-		Content:  req.Content,
-		EateryId: eateryId,
-		AuthorId: userID,
-	}
-
 	return c.JSON(http.StatusOK, res)
 }
