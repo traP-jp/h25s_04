@@ -2,14 +2,14 @@ package server
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/labstack/echo/v4"
 
 	"github.com/traP-jp/h25s_04/server/internal/handler"
 	"github.com/traP-jp/h25s_04/server/internal/repository"
+	"github.com/traP-jp/h25s_04/server/internal/schema"
 )
 
 type Server struct {
-	handler *handler.Handler
+	Handler schema.ServerInterface
 }
 
 func Inject(db *sqlx.DB) *Server {
@@ -17,11 +17,6 @@ func Inject(db *sqlx.DB) *Server {
 	h := handler.New(repo)
 
 	return &Server{
-		handler: h,
+		Handler: h,
 	}
-}
-
-func (d *Server) SetupRoutes(g *echo.Group) {
-	// TODO: handler.SetupRoutesを呼び出す or 直接書く？
-	d.handler.SetupRoutes(g)
 }
