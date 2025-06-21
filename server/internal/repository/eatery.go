@@ -55,14 +55,14 @@ func (r *Repository) GetEatery(ctx context.Context, eateryID uuid.UUID) (*Eatery
 	return eatery, nil
 }
 
-func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eatery Eatery, userID string) error {
+func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eatery Eatery) error {
 	// Assuming you have a table `eatery_updates` to log updates
 	query := `
 		UPDATE eateries 
 		SET name = ?, description = ? 
-		WHERE id = ? AND user_id = ?
+		WHERE id = ?
 	`
-	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eateryID, userID); err != nil {
+	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eateryID); err != nil {
 		return fmt.Errorf("update eatery: %w", err)
 	}
 

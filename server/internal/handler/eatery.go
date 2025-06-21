@@ -74,12 +74,11 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Failed to bind request: %v", err))
 	}
-	userID := getUserID(params.XForwardedUser)
 	eatery := repository.Eatery{
 		Name:        req.Name,
 		Description: req.Description,
 	}
-	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery, userID); err != nil {
+	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
 	}
 	return c.NoContent(http.StatusNoContent)
