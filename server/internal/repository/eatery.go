@@ -20,13 +20,6 @@ type (
 		Description *string
 	}
 
-	eateryReview struct {
-		ID       uuid.UUID `db:"id"` // UUID
-		EateryID uuid.UUID `db:"eatery_id"`
-		UserID   string    `db:"user_id"`
-		Content  string    `db:"content"`
-	}
-
 	CreateEateryReviewParams struct {
 		ID       uuid.UUID `json:"id"`
 		EateryID uuid.UUID `json:"eatery_id"`
