@@ -70,3 +70,17 @@ func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid
 
 	return reviews, nil
 }
+
+func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eatery Eatery) error {
+	// Assuming you have a table `eatery_updates` to log updates
+	query := `
+		UPDATE eateries 
+		SET name = ?, description = ? 
+		WHERE id = ?
+	`
+	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eateryID); err != nil {
+		return fmt.Errorf("update eatery: %w", err)
+	}
+
+	return nil
+}

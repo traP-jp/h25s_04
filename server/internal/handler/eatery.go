@@ -70,10 +70,23 @@ func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error
 
 // PutEateriesEateryId implements schema.ServerInterface.
 func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, params schema.PutEateriesEateryIdParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PutEateriesEateryId endpoint is not implemented yet",
-	})
+	var req schema.EateryCreate
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Failed to bind request: %v", err))
+	}
+	eatery := repository.Eatery{
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
+	}
+	res := schema.Eatery{
+		Id:          eateryId,
+		Name:        req.Name,
+		Description: req.Description,
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 // GetEateriesEateryIdReviews implements schema.ServerInterface.

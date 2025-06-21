@@ -11,10 +11,29 @@ import (
 
 // PostImages implements schema.ServerInterface.
 func (h *Handler) PostImages(c echo.Context) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PostImages endpoint is not implemented yet",
-	})
+	var req schema.PostImagesMultipartRequestBody
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
+	}
+
+	reader, err := req.Image.Reader()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to read image")
+	}
+	defer reader.Close()
+
+	imageID, err := h.repo.UploadImage(c.Request().Context(), reader)
+
+	if err != nil {
+		c.Logger().Errorf("failed to upload image: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
+
+	resp := schema.ImageUploadResponse{
+		Id: types.UUID(imageID),
+	}
+
+	return c.JSON(http.StatusCreated, resp)
 }
 
 // GetImagesImageId implements schema.ServerInterface.
