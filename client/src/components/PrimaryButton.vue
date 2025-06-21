@@ -3,11 +3,11 @@ interface Props {
   text: string
 }
 
-const {text} = defineProps<Props>()
+const { text } = defineProps<Props>()
 </script>
 
 <template>
-  <button class="omise">{{text}}</button>
+  <button class="omise">{{ text }}</button>
 </template>
 
 <style lang="scss" modele>
