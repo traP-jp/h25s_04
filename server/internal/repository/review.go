@@ -79,3 +79,21 @@ func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error
 	}
 	return nil
 }
+
+func (r *Repository) GetReview(ctx context.Context, reviewID uuid.UUID) (*Review, error) {
+	var review Review
+	err := r.db.GetContext(ctx, &review, `SELECT * FROM reviews WHERE id = ?`, reviewID)
+	if err != nil {
+		return nil, fmt.Errorf("get review: %w", err)
+	}
+	return &review, nil
+}
+
+func (r *Repository) UpdateReviewContent(ctx context.Context, reviewID uuid.UUID, content string) error {
+	_, err := r.db.ExecContext(ctx,
+		`UPDATE reviews SET content = ? WHERE id = ?`, content, reviewID)
+	if err != nil {
+		return fmt.Errorf("update review content: %w", err)
+	}
+	return nil
+}
