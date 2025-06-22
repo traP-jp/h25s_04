@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import apis, { type Eatery } from '../lib/apis'
 
 interface Props {
@@ -9,15 +9,13 @@ interface Props {
 const { eateryId } = defineProps<Props>()
 const eateryDetail = ref<Eatery | null>(null)
 
-const fetchEateryDetail = async () => {
+onMounted(async () => {
   try {
     eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId)).data
   } catch (error) {
     console.error('店舗詳細の取得に失敗しました:', error)
   }
-}
-
-watch(() => eateryId, fetchEateryDetail, { immediate: true })
+})
 </script>
 
 <template>
