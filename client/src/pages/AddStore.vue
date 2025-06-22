@@ -121,8 +121,6 @@ const previewUrl = computed(() => {
   align-items: center;
 }
 .fileInput {
-  //border: 1px solid $color-secondary;
-  border-radius: 3px;
   width: 200px;
 }
 
