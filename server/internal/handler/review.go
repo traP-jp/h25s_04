@@ -108,12 +108,18 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 
 	res := make([]schema.ReviewSummary, len(reviews))
 	for i, reviews := range reviews {
+		ImageIDs, err := h.repo.GetImageIDsByReviewID(c.Request().Context(), reviews.Id)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+		}
+
 		res[i] = schema.ReviewSummary{
 			Id:        reviews.Id,
 			EateryId:  reviews.EateryID,
 			AuthorId:  reviews.UserID,
 			CreatedAt: reviews.CreatedAt,
 			UpdatedAt: reviews.UpdatedAt,
+			ImageIds:  ImageIDs,
 		}
 	}
 
