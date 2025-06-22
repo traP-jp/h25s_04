@@ -26,6 +26,8 @@ const submitStore = async () => {
     await apis.eateriesPost({
       name: storeName.value,
       description: description.value,
+      latitude: 0,
+      longitude: 0,
     })
     alert('店舗が追加されました！')
   } catch (error) {

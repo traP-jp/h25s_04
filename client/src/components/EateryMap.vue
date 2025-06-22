@@ -5,7 +5,16 @@ import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import apis, { type Eatery } from '../lib/apis'
 import EateryList from '../components/EateryList.vue'
 
-const eateries = ref<Eatery[]>([])
+const eateries = ref<Eatery[]>([
+  {
+    id: '0',
+    name: 'Loading...',
+    latitude: 35.605958,
+    longitude: 139.68354,
+    createdAt: 'new Date()',
+    updatedAt: 'new Date()',
+  },
+])
 apis
   .eateriesGet()
   .then((res) => {
@@ -18,14 +27,15 @@ apis
 
 const zoom = ref(16)
 const center = ref([35.605958, 139.68354]) // 地図の中心座標
-const markerPosition = ref([35.605958, 139.68354]) // ピンを立てる座標
 </script>
 
 <template>
   <div :class="$style.map">
     <l-map :zoom="zoom" :use-global-leaflet="false" :center="center">
       <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <l-marker :lat-lng="markerPosition"></l-marker>
+      <template v-for="eatery in eateries" :key="eatery.id">
+        <l-marker :lat-lng="[eatery.latitude, eatery.longitude]" />
+      </template>
     </l-map>
     <div :class="$style.list">
       <eatery-list :eateries="eateries" />

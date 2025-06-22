@@ -48,6 +48,18 @@ export interface Eatery {
      */
     'description'?: string;
     /**
+     * 緯度
+     * @type {number}
+     * @memberof Eatery
+     */
+    'latitude': number;
+    /**
+     * 経度
+     * @type {number}
+     * @memberof Eatery
+     */
+    'longitude': number;
+    /**
      * Creation timestamp
      * @type {string}
      * @memberof Eatery
@@ -78,6 +90,18 @@ export interface EateryCreate {
      * @memberof EateryCreate
      */
     'description'?: string;
+    /**
+     * 緯度
+     * @type {number}
+     * @memberof EateryCreate
+     */
+    'latitude': number;
+    /**
+     * 経度
+     * @type {number}
+     * @memberof EateryCreate
+     */
+    'longitude': number;
 }
 /**
  * 
@@ -116,6 +140,18 @@ export interface EateryUpdate {
      * @memberof EateryUpdate
      */
     'description'?: string;
+    /**
+     * 緯度
+     * @type {number}
+     * @memberof EateryUpdate
+     */
+    'latitude'?: number;
+    /**
+     * 経度
+     * @type {number}
+     * @memberof EateryUpdate
+     */
+    'longitude'?: number;
 }
 /**
  * 
