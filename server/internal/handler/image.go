@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"net/http"
 
+	"strings"
+
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 
@@ -23,14 +25,13 @@ func (h *Handler) PostImages(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
-	UploadImage := http.DetectContentType(b)
-	if UploadImage != "image/" {
+	contentType := http.DetectContentType(b)
+	if !strings.HasPrefix(contentType, "image/") {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid file format")
 	}
 
-
 	reader := bytes.NewReader(b)
-	imageID, err := h.repo.UploadImage(c.Request().Context(), reader, UploadImage)
+	imageID, err := h.repo.UploadImage(c.Request().Context(), reader, contentType)
 
 	if err != nil {
 		c.Logger().Errorf("failed to upload image: %v", err)
