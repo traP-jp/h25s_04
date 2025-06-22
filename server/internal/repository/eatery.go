@@ -14,6 +14,8 @@ type (
 		ID          uuid.UUID `db:"id"` // UUID
 		Name        string    `db:"name"`
 		Description *string   `db:"description"`
+		Longitude   float64   `db:"longitude"`
+		Latitude    float64   `db:"latitude"`
 		CreatedAt   time.Time `db:"created_at"`
 		UpdatedAt   time.Time `db:"updated_at"`
 	}
@@ -21,6 +23,8 @@ type (
 	CreateEateryParams struct {
 		Name        string
 		Description *string
+		Longitude   float64
+		Latitude    float64
 	}
 )
 
@@ -43,7 +47,7 @@ func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesP
 
 func (r *Repository) CreateEateries(ctx context.Context, params CreateEateryParams) (uuid.UUID, error) {
 	eateryID := uuid.New()
-	if _, err := r.db.ExecContext(ctx, "INSERT INTO eateries (id, name, description) VALUES (?, ?, ?)", eateryID, params.Name, params.Description); err != nil {
+	if _, err := r.db.ExecContext(ctx, "INSERT INTO eateries (id, name, description, longitude, latitude) VALUES (?, ?, ?, ?, ?)", eateryID, params.Name, params.Description, params.Longitude, params.Latitude); err != nil {
 		return uuid.Nil, fmt.Errorf("insert eatery: %w", err)
 	}
 	return eateryID, nil
@@ -74,10 +78,11 @@ func (r *Repository) UpdateEatery(ctx context.Context, eateryID uuid.UUID, eater
 	// Assuming you have a table `eatery_updates` to log updates
 	query := `
 		UPDATE eateries 
-		SET name = ?, description = ? 
+		SET name = ?, description = ?, longitude = ?, latitude = ? 
 		WHERE id = ?
+
 	`
-	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eateryID); err != nil {
+	if _, err := r.db.ExecContext(ctx, query, eatery.Name, eatery.Description, eatery.Longitude, eatery.Latitude, eateryID); err != nil {
 		return fmt.Errorf("update eatery: %w", err)
 	}
 
