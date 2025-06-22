@@ -1,38 +1,83 @@
 <script lang="ts" setup>
 import PrimaryButton from '../components/PrimaryButton.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import apis from '../lib/apis'
 
 const storeName = ref('')
 const description = ref('')
 const address = ref('')
 const reviewContent = ref('')
-const storePhoto = ref<File | null>(null)
+const storePhotos = ref<File[]>([])
 const fileInputRef = ref<HTMLInputElement | null>(null)
+const previewImages = ref<string[]>([])
+const imageIds = ref<string[]>([]) // アップロードされた画像のIDを保持
 
-const handleFileChange = (event: Event) => {
+const handleFileChange = async (event: Event) => {
   const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    storePhoto.value = target.files[0]
+  if (!target.files) return
+
+  storePhotos.value = Array.from(target.files)
+  previewImages.value = [] // プレビューをリセット
+  imageIds.value = [] // 画像IDをリセット
+
+  if (storePhotos.value.length === 0) {
+    return
+  }
+
+  try {
+    // 画像をアップロード
+    const uploadPromises = storePhotos.value.map((photo) =>
+      apis.imagesPost(photo),
+    )
+    const uploadResponses = await Promise.all(uploadPromises)
+    const newImageIds = uploadResponses.map((response) => response.data.id)
+    imageIds.value = newImageIds
+
+    // アップロードした画像のプレビューを取得
+    const fetchPromises = newImageIds.map((id) =>
+      apis.imagesImageIdGet(id, { responseType: 'blob' }),
+    )
+    const fetchResponses = await Promise.all(fetchPromises)
+    previewImages.value = fetchResponses.map((response) =>
+      URL.createObjectURL(response.data as Blob),
+    )
+  } catch (error) {
+    console.error(
+      '画像のアップロードまたはプレビューの取得に失敗しました:',
+      error,
+    )
+    alert('画像のアップロードまたはプレビューの取得に失敗しました。')
   }
 }
 
-const previewUrl = computed(() => {
-  return storePhoto.value ? URL.createObjectURL(storePhoto.value) : null
-})
-
 const submitStore = async () => {
+  if (imageIds.value.length === 0) {
+    alert('画像が選択・アップロードされていません。')
+    return
+  }
   try {
-    await apis.eateriesPost({
+    // 店舗情報をアップロード
+    const eateryResponse = await apis.eateriesPost({
       name: storeName.value,
       description: description.value,
-      latitude: 0,
-      longitude: 0,
+      latitude: 0, // TODO: 必要に応じて座標を設定
+      longitude: 0, // TODO: 必要に応じて座標を設定
     })
-    alert('店舗が追加されました！')
+
+    const eateryId = eateryResponse.data.id // サーバーから返される店舗IDを取得
+
+    // レビューをアップロード
+    const xForwardedUser = 'exampleUserId' // TODO: 実際のログインユーザーIDを取得
+    await apis.eateriesEateryIdReviewsPost(eateryId, {
+      content: reviewContent.value,
+      imageIds: imageIds.value,
+      authorId: xForwardedUser, // 必須フィールドを追加
+    })
+
+    alert('店舗とレビューが追加されました！')
   } catch (error) {
-    console.error('店舗の追加に失敗しました:', error)
-    alert('店舗の追加に失敗しました。')
+    console.error('店舗またはレビューの追加に失敗しました:', error)
+    alert('店舗またはレビューの追加に失敗しました。')
   }
 }
 </script>
@@ -88,11 +133,12 @@ const submitStore = async () => {
         <label :class="$style.infoLabel" for="storePhoto">お店の写真</label>
         <div>
           <input
-            id="storePhoto"
+            id="fileInput"
             ref="fileInputRef"
-            :class="$style.hiddenFileInput"
             type="file"
             accept="image/*"
+            multiple
+            :class="$style.hiddenFileInput"
             @change="handleFileChange"
           />
           <button
@@ -104,14 +150,24 @@ const submitStore = async () => {
           </button>
         </div>
       </div>
-      <div v-if="previewUrl" :class="$style.previewContainer">
-        <img
-          :src="previewUrl"
-          :alt="'プレビュー画像'"
-          :class="$style.previewImage"
-        />
+      <div v-if="previewImages.length > 0" :class="$style.previewContainer">
+        <div
+          v-for="(preview, index) in previewImages"
+          :key="index"
+          :class="$style.previewImageWrapper"
+        >
+          <img
+            :src="preview"
+            :alt="`プレビュー画像${index + 1}`"
+            :class="$style.previewImage"
+          />
+        </div>
       </div>
-      {{ storePhoto ? storePhoto.name : '写真が選択されていません' }}
+      {{
+        storePhotos.length > 0
+          ? storePhotos.map((photo) => photo.name).join(', ')
+          : '写真が選択されていません'
+      }}
 
       <div>
         <PrimaryButton :text="'投稿'" @click="submitStore" />
@@ -179,6 +235,11 @@ const submitStore = async () => {
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+}
+.previewImageWrapper {
+  position: relative;
+  display: inline-block;
+  margin: 0 0.5rem;
 }
 .previewImage {
   max-width: 100%;

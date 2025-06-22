@@ -1,5 +1,7 @@
 <script lang="ts" setup>
+import { onMounted, ref } from 'vue'
 import { type ReviewDetail } from '../lib/apis'
+import apis from '../lib/apis'
 
 interface Props {
   review: ReviewDetail
@@ -7,18 +9,22 @@ interface Props {
 
 const { review } = defineProps<Props>()
 
-// const reviews = ref<ReviewDetail[]>([
-//   {
-//     imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
-//     eateryName: 'ぷぐま',
-//     authorId: '偉大な先輩',
-//     id: '0',
-//     createdAt: '2023-10-01T00:00:00Z',
-//     updatedAt: '2023-10-01T00:00:00Z',
-//     eateryId: '0',
-//     content: 'ぷぐまのレビュー',
-//   },
-// ])
+const imageUrls = ref<Record<string, string>>({})
+
+onMounted(async () => {
+  if (review.imageIds && review.imageIds.length > 0) {
+    for (const imageId of review.imageIds) {
+      try {
+        const response = await apis.imagesImageIdGet(imageId, {
+          responseType: 'blob',
+        })
+        imageUrls.value[imageId] = URL.createObjectURL(response.data as Blob)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+})
 </script>
 
 <template>
@@ -26,7 +32,12 @@ const { review } = defineProps<Props>()
     <div style="display: flex">
       <div>
         <div v-for="image in review.imageIds" :key="image">
-          <img :class="$style.foodImage" :src="image" alt="food" />
+          <img
+            v-if="imageUrls[image]"
+            :class="$style.foodImage"
+            :src="imageUrls[image]"
+            alt="food"
+          />
         </div>
       </div>
       <div>

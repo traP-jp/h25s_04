@@ -4,18 +4,9 @@ import { type ReviewSummary } from '../lib/apis'
 import apis from '../lib/apis'
 import { watch } from 'vue'
 
-const reviews = ref<ReviewSummary[]>([
-  {
-    imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
-    eateryName: 'ぷぐま',
-    authorId: '偉大な先輩',
-    id: '0',
-    createdAt: '2023-10-01T00:00:00Z',
-    updatedAt: '2023-10-01T00:00:00Z',
-    eateryId: '0',
-    summary: 'ぷぐまのレビュー',
-  },
-])
+const imageUrls = ref<Record<string, string>>({})
+
+const reviews = ref<ReviewSummary[]>([])
 
 const reviewsSort = (sortOption: string) => {
   const compare = (a: ReviewSummary, b: ReviewSummary) => {
@@ -38,7 +29,20 @@ watch(sort, reviewsSort)
 
 onMounted(async () => {
   reviews.value = (await apis.reviewsGet()).data.data ?? []
-  console.log(reviews.value)
+  for (const review of reviews.value) {
+    if (!review.imageIds || review.imageIds.length === 0) {
+      continue
+    }
+    const imageId = review.imageIds[0]
+    try {
+      const response = await apis.imagesImageIdGet(imageId, {
+        responseType: 'blob',
+      })
+      imageUrls.value[imageId] = URL.createObjectURL(response.data as Blob)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 })
 </script>
 
@@ -50,11 +54,24 @@ onMounted(async () => {
   </div>
   <div :class="$style.tileView">
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
-      <div>
-        <img :class="$style.foodImage" :src="review.imageIds[0]" alt="food" />
-      </div>
-      <div :class="$style.restaurantName">{{ review.eateryName }}</div>
-      <div :class="$style.username">{{ review.authorId }}</div>
+      <router-link
+        :to="{
+          name: 'RestaurantOverview',
+          params: { eateryId: review.eateryId },
+        }"
+        class="$style.tileLink"
+      >
+        <div>
+          <img
+            v-if="review.imageIds.length > 0 && imageUrls[review.imageIds[0]]"
+            :class="$style.foodImage"
+            :src="imageUrls[review.imageIds[0]]"
+            alt="food"
+          />
+        </div>
+        <div :class="$style.restaurantName">{{ review.eateryName }}</div>
+        <div :class="$style.username">{{ review.authorId }}</div></router-link
+      >
     </div>
   </div>
 </template>

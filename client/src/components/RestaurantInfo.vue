@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import apis, { type Eatery } from '../lib/apis'
 
 interface Props {
@@ -9,38 +9,43 @@ interface Props {
 const { eateryId } = defineProps<Props>()
 const eateryDetail = ref<Eatery | null>(null)
 
-const fetchEateryDetail = async () => {
+onMounted(async () => {
   try {
     eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId)).data
   } catch (error) {
     console.error('店舗詳細の取得に失敗しました:', error)
   }
-}
-
-watch(() => eateryId, fetchEateryDetail, { immediate: true })
+})
 </script>
 
 <template>
-  <div :class="$style.shopInfo">
-    <div :class="$style.review">
-      <div>店名: {{ eateryDetail?.name }}</div>
-      <div>説明: {{ eateryDetail?.description }}</div>
+  <div :class="$style.info">
+    <h2>{{ eateryDetail?.name ?? '店名が未設定です' }}</h2>
+    <div>
+      <p>{{ eateryDetail?.description ?? '説明はありません' }}</p>
     </div>
   </div>
 </template>
 
 <style lang="scss" module>
-.shopInfo {
-  display: flex;
-  flex-direction: column;
-  background-color: $color-background;
+.info {
+  padding: 12px;
+  justify-items: left;
 }
-.review {
-  display: flex;
-  flex-direction: column;
+
+h2 {
+  position: relative;
+  width: 100%;
+  text-align: left;
 }
-.review div {
-  font-size: 32px;
-  color: $color-text;
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px; /* Adjust thickness of the underline */
+  background-color: black; /* Adjust color of the underline */
 }
 </style>
