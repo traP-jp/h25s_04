@@ -75,13 +75,13 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
 	}
 	// 画像のIDを取得する
-	imageID, err := h.repo.GetImageIDsByReviewID(c.Request().Context(), reviewID)
+	imageIDs, err := h.repo.GetImageIDsByReviewID(c.Request().Context(), reviewID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image IDs").SetInternal(err)
 	}
-	// 紐づけた画像をレビューに追加する
-	if err := h.repo.InsertImageToReview(c.Request().Context(), reviewID, imageID); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to insert image to review").SetInternal(err)
+	// 紐づけた画像をDBに追加する
+	if err := h.repo.InsertImageToReview(c.Request().Context(), reviewID, imageIDs); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to insert image info to DB").SetInternal(err)
 	}
 
 	res := schema.ReviewDetail{
@@ -89,6 +89,7 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		Content:  req.Content,
 		EateryId: eateryId,
 		AuthorId: userID,
+		ImageIds: imageIDs, // 画像IDを追加
 	}
 	return c.JSON(http.StatusOK, res)
 }

@@ -80,9 +80,11 @@ func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error
 	return nil
 }
 
-func (r *Repository) InsertImageToReview(ctx context.Context, reviewID uuid.UUID , imageIDs []uuid.UUID ) error {
-	if _, err := r.db.ExecContext(ctx, "INSERT INTO images (id, review_id) VALUES (?, ?)", imageIDs, reviewID); err != nil {
-		return fmt.Errorf("insert image to review: %w", err)
+func (r *Repository) InsertImageToReview(ctx context.Context, reviewID uuid.UUID, imageIDs []uuid.UUID) error {
+	for _, imageID := range imageIDs {
+		if _, err := r.db.ExecContext(ctx, "INSERT INTO images (id, review_id) VALUES (?, ?)", imageID, reviewID); err != nil {
+			return fmt.Errorf("insert image to review: %w", err)
+		}
 	}
 	return nil
 }
