@@ -9,17 +9,7 @@ interface Props {
 }
 
 const { eateryId } = defineProps<Props>()
-const reviewsList = ref<ReviewDetail[]>()
-
-const fetchReviewsList = async () => {
-  try {
-    reviewsList.value = (await apis.eateriesEateryIdReviewsGet(eateryId)).data.data
-  } catch (error) {
-    console.error('店舗詳細の取得に失敗しました:', error)
-  }
-}
-watch(() => eateryId, fetchReviewsList, { immediate: true })
-const review = ref<ReviewDetail[]>([
+const reviewsList = ref<ReviewDetail[]>([
   {
     imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
     eateryName: 'ぷぐま',
@@ -31,6 +21,15 @@ const review = ref<ReviewDetail[]>([
     content: 'ぷぐまのレビュー',
   },
 ])
+
+const fetchReviewsList = async () => {
+  try {
+    reviewsList.value = (await apis.eateriesEateryIdReviewsGet(eateryId)).data.data
+  } catch (error) {
+    console.error('店舗詳細の取得に失敗しました:', error)
+  }
+}
+watch(() => eateryId, fetchReviewsList, { immediate: true })
 const sort = ref('')
 </script>
 

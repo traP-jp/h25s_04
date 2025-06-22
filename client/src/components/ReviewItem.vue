@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { type Eatery, type ReviewDetail } from '../lib/apis'
-import apis from '../lib/apis'
+import { type ReviewDetail } from '../lib/apis'
 
 interface Props {
   review: ReviewDetail;
@@ -27,23 +25,20 @@ const { review } = defineProps<Props>()
 
 <template>
   <div>
-    {{ review.content }}
-  </div>
-  <div>
     <div style="display: flex">
       <div>
-        <div v-for="">
-          <img :class="$style.foodImage" :src="review.imageIds" alt="food" />
+        <div v-for="image in review.imageIds">
+          <img :class="$style.foodImage" :src="image" alt="food"/>
         </div>
       </div>
       <div>
         <div :class="$style.restaurantName">{{ review.eateryName }}</div>
         <div :class="$style.username">{{ review.authorId }}</div>
+        <div>
+         <div :class="$style.reviewsummary">{{ review.content }}</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div>
-    <div :class="$style.reviewsummary">{{ review.content }}</div>
   </div>
 </template>
 
