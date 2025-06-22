@@ -10,50 +10,52 @@ const reviewContent = ref('')
 const storePhotos = ref<File[]>([])
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewImages = ref<string[]>([])
+const imageIds = ref<string[]>([]) // アップロードされた画像のIDを保持
 
-const handleFileChange = (event: Event) => {
+const handleFileChange = async (event: Event) => {
   const target = event.target as HTMLInputElement
-  if (target.files) {
-    storePhotos.value = Array.from(target.files)
-  }
-}
+  if (!target.files) return
 
-const uploadImages = async () => {
+  storePhotos.value = Array.from(target.files)
+  previewImages.value = [] // プレビューをリセット
+  imageIds.value = [] // 画像IDをリセット
+
   if (storePhotos.value.length === 0) {
-    throw new Error('画像が選択されていません')
+    return
   }
 
   try {
+    // 画像をアップロード
     const uploadPromises = storePhotos.value.map((photo) =>
       apis.imagesPost(photo),
     )
-    const responses = await Promise.all(uploadPromises)
-    return responses.map((response) => response.data.id) // サーバーから返される画像IDを取得
-  } catch (error) {
-    console.error('画像のアップロードに失敗しました:', error)
-    throw new Error('画像のアップロードに失敗しました')
-  }
-}
+    const uploadResponses = await Promise.all(uploadPromises)
+    const newImageIds = uploadResponses.map((response) => response.data.id)
+    imageIds.value = newImageIds
 
-const fetchPreviewImages = async (imageIds: string[]) => {
-  try {
-    const fetchPromises = imageIds.map((id) => apis.imagesImageIdGet(id))
-    const responses = await Promise.all(fetchPromises)
-    previewImages.value = responses.map((response) =>
-      URL.createObjectURL(response.data),
+    // アップロードした画像のプレビューを取得
+    const fetchPromises = newImageIds.map((id) =>
+      apis.imagesImageIdGet(id, { responseType: 'blob' }),
+    )
+    const fetchResponses = await Promise.all(fetchPromises)
+    previewImages.value = fetchResponses.map((response) =>
+      URL.createObjectURL(response.data as Blob),
     )
   } catch (error) {
-    console.error('プレビュー画像の取得に失敗しました:', error)
-    throw new Error('プレビュー画像の取得に失敗しました')
+    console.error(
+      '画像のアップロードまたはプレビューの取得に失敗しました:',
+      error,
+    )
+    alert('画像のアップロードまたはプレビューの取得に失敗しました。')
   }
 }
 
 const submitStore = async () => {
+  if (imageIds.value.length === 0) {
+    alert('画像が選択・アップロードされていません。')
+    return
+  }
   try {
-    // 画像をアップロードしてIDを取得
-    const imageIds = await uploadImages()
-    await fetchPreviewImages(imageIds) // 画像ID取得後にプレビュー画像をフェッチ
-
     // 店舗情報をアップロード
     const eateryResponse = await apis.eateriesPost({
       name: storeName.value,
@@ -68,7 +70,7 @@ const submitStore = async () => {
     const xForwardedUser = 'exampleUserId' // TODO: 実際のログインユーザーIDを取得
     await apis.eateriesEateryIdReviewsPost(eateryId, {
       content: reviewContent.value,
-      imageIds: imageIds,
+      imageIds: imageIds.value,
       authorId: xForwardedUser, // 必須フィールドを追加
     })
 
@@ -146,20 +148,6 @@ const submitStore = async () => {
           >
             ファイルを選択
           </button>
-        </div>
-      </div>
-      <div v-if="storePhotos.length > 0" :class="$style.previewContainer">
-        <div
-          v-for="(_, index) in storePhotos"
-          :key="index"
-          :class="$style.previewImageWrapper"
-        >
-          <img
-            v-if="previewImages[index]"
-            :src="previewImages[index]"
-            :alt="'プレビュー画像' + (index + 1)"
-            :class="$style.previewImage"
-          />
         </div>
       </div>
       <div v-if="previewImages.length > 0" :class="$style.previewContainer">
