@@ -54,16 +54,22 @@ onMounted(async () => {
   </div>
   <div :class="$style.tileView">
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
-      <div>
-        <img
-          v-if="review.imageIds.length > 0 && imageUrls[review.imageIds[0]]"
-          :class="$style.foodImage"
-          :src="imageUrls[review.imageIds[0]]"
-          alt="food"
-        />
-      </div>
-      <div :class="$style.restaurantName">{{ review.eateryName }}</div>
-      <div :class="$style.username">{{ review.authorId }}</div>
+      <router-link
+        :to="{ name: 'RestaurantOverview', params: { eateryId: review.eateryId } }"
+        class="$style.tileLink"
+      >
+        >
+        <div>
+          <img
+            v-if="review.imageIds.length > 0 && imageUrls[review.imageIds[0]]"
+            :class="$style.foodImage"
+            :src="imageUrls[review.imageIds[0]]"
+            alt="food"
+          />
+        </div>
+        <div :class="$style.restaurantName">{{ review.eateryName }}</div>
+        <div :class="$style.username">{{ review.authorId }}</div></router-link
+      >
     </div>
   </div>
 </template>
