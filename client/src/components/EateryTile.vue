@@ -2,8 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { type ReviewSummary } from '../lib/apis'
 import apis from '../lib/apis'
-
-
+import { watch } from 'vue'
 
 const reviews = ref<ReviewSummary[]>([
   {
@@ -18,21 +17,24 @@ const reviews = ref<ReviewSummary[]>([
   },
 ])
 
-const reviewsSort = () => {
-    const compare = (a: ReviewSummary, b: ReviewSummary) => {
-        if(a.createdAt < b.createdAt) {
-            return 1;
-        }else if(a.createdAt > b.createdAt) {
-            return -1;
-        }else {
-            return 0;
-        }
+const reviewsSort = (sortOption: string) => {
+  const compare = (a: ReviewSummary, b: ReviewSummary) => {
+    if (a.createdAt < b.createdAt) {
+      return 1
+    } else if (a.createdAt > b.createdAt) {
+      return -1
+    } else {
+      return 0
     }
+  }
+  if (sortOption == 'newest') {
     reviews.value.sort(compare)
+  }
 }
 
 const sort = ref('')
 
+watch(sort, reviewsSort)
 
 onMounted(async () => {
   reviews.value = (await apis.reviewsGet()).data.data ?? []
@@ -43,8 +45,7 @@ onMounted(async () => {
 <template>
   <div :class="$style.reviewSort">
     <select v-model="sort">
-      <option>最新順</option>
-      <option>近い順</option>
+      <option value="newest">最新順</option>
     </select>
   </div>
   <div :class="$style.tileView">
