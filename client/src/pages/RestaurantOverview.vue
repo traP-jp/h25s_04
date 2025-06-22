@@ -5,16 +5,6 @@ import apis, { type Eatery } from '../lib/apis'
 import useParam from '../lib/param'
 
 const eateryId = useParam('eateryId')
-const restaurantInfo = ref<Eatery | null>(null)
-
-onMounted(async () => {
-  try {
-    const response = await apis.eateriesEateryIdGet(eateryId.value) // Use dynamic eateryId
-    restaurantInfo.value = response.data
-  } catch (error) {
-    console.error('店舗詳細の取得に失敗しました:', error)
-  }
-})
 </script>
 
 <template>
