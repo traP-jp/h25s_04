@@ -5,14 +5,16 @@ import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import apis, { type Eatery } from '../lib/apis'
 import EateryList from '../components/EateryList.vue'
 
-const eateries = ref<Eatery[]>([{
-  id: "0",
-  name: 'Loading...',
-  latitude: 35.605958,
-  longitude: 139.68354,
-  createdAt: "new Date()",
-  updatedAt: "new Date()",
-}])
+const eateries = ref<Eatery[]>([
+  {
+    id: '0',
+    name: 'Loading...',
+    latitude: 35.605958,
+    longitude: 139.68354,
+    createdAt: 'new Date()',
+    updatedAt: 'new Date()',
+  },
+])
 apis
   .eateriesGet()
   .then((res) => {
