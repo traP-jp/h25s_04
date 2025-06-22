@@ -3,16 +3,19 @@ package repository
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 type (
 	Review struct {
-		Id       uuid.UUID `db:"id"`
-		EateryID uuid.UUID `db:"eatery_id"`
-		UserID   string    `db:"user_id"`
-		Content  string    `db:"content"`
+		Id        uuid.UUID `db:"id"`
+		EateryID  uuid.UUID `db:"eatery_id"`
+		UserID    string    `db:"user_id"`
+		Content   string    `db:"content"`
+		CreatedAt time.Time `db:"created_at"`
+		UpdatedAt time.Time `db:"updated_at"`
 	}
 
 	CreateEateryReviewParams struct {
@@ -76,6 +79,24 @@ func (r *Repository) ReviewExists(ctx context.Context, reviewID uuid.UUID) (uuid
 func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error {
 	if _, err := r.db.ExecContext(ctx, "DELETE FROM reviews WHERE id = ?", reviewID); err != nil {
 		return fmt.Errorf("delete review: %w", err)
+	}
+	return nil
+}
+
+func (r *Repository) GetReview(ctx context.Context, reviewID uuid.UUID) (*Review, error) {
+	var review Review
+	err := r.db.GetContext(ctx, &review, `SELECT * FROM reviews WHERE id = ?`, reviewID)
+	if err != nil {
+		return nil, fmt.Errorf("get review: %w", err)
+	}
+	return &review, nil
+}
+
+func (r *Repository) UpdateReviewContent(ctx context.Context, reviewID uuid.UUID, content string) error {
+	_, err := r.db.ExecContext(ctx,
+		`UPDATE reviews SET content = ? WHERE id = ?`, content, reviewID)
+	if err != nil {
+		return fmt.Errorf("update review content: %w", err)
 	}
 	return nil
 }

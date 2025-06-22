@@ -17,20 +17,21 @@ const routes = [
     name: 'Eatery',
     component: EateryPage,
   },
-  {
-    path: '/:path(.*)*',
-    name: 'NotFound',
-    component: NotFound,
-  },
+
   {
     path: '/eatery/new',
-    name: 'Eatery',
+    name: 'NewEatery',
     component: Addstore,
   },
   {
     path: '/eatery/:eateryId',
     name: 'RestaurantOverview',
     component: RestaurantPage,
+  },
+  {
+    path: '/:path(.*)*',
+    name: 'NotFound',
+    component: NotFound,
   },
 ]
 

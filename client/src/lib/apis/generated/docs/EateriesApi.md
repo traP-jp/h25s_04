@@ -124,7 +124,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **eateriesGet**
-> EateriesGet200Response eateriesGet()
+> EateryListResponse eateriesGet()
 
 Returns a list of all eateries with optional query filtering
 
@@ -161,7 +161,7 @@ const { status, data } = await apiInstance.eateriesGet(
 
 ### Return type
 
-**EateriesGet200Response**
+**EateryListResponse**
 
 ### Authorization
 

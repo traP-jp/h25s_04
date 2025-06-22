@@ -32,10 +32,12 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 	resData := make([]schema.ReviewDetail, len(reviews))
 	for i, review := range reviews {
 		resData[i] = schema.ReviewDetail{
-			Id:       review.Id,
-			EateryId: review.EateryID,
-			AuthorId: review.UserID,
-			Content:  review.Content,
+			Id:        review.Id,
+			EateryId:  review.EateryID,
+			AuthorId:  review.UserID,
+			Content:   review.Content,
+			CreatedAt: review.CreatedAt,
+			UpdatedAt: review.UpdatedAt,
 		}
 	}
 
@@ -121,8 +123,46 @@ func (h *Handler) GetReviewsReviewId(c echo.Context, reviewId types.UUID) error 
 
 // PutReviewsReviewId implements schema.ServerInterface.
 func (h *Handler) PutReviewsReviewId(c echo.Context, reviewId types.UUID, params schema.PutReviewsReviewIdParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "PutReviewsReviewId endpoint is not implemented yet",
-	})
+	ctx := c.Request().Context()
+
+	// ユーザーID取得
+	userID := getUserID(params.XForwardedUser)
+
+	// リクエストボディをパース
+	var req schema.ReviewUpdate
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request body")
+	}
+
+	// レビュー取得
+	review, err := h.repo.GetReview(ctx, uuid.UUID(reviewId))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "review not found")
+	}
+
+	// ユーザー自身か確認
+	if review.UserID != userID {
+		return echo.NewHTTPError(http.StatusForbidden, "you are not the author of this review")
+	}
+
+	// 内容を更新
+	var content string
+	if req.Content != nil {
+		content = *req.Content
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, "content cannot be null")
+	}
+	if err := h.repo.UpdateReviewContent(ctx, review.Id, content); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "failed to update review").SetInternal(err)
+	}
+
+	// レスポンス生成（最新の内容で）
+	res := schema.ReviewDetail{
+		Id:       review.Id,
+		EateryId: review.EateryID,
+		AuthorId: review.UserID,
+		Content:  *req.Content,
+	}
+
+	return c.JSON(http.StatusOK, res)
 }

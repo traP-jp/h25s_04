@@ -5,10 +5,9 @@ base.ts
 common.ts
 configuration.ts
 docs/EateriesApi.md
-docs/EateriesEateryIdReviewsGet200Response.md
-docs/EateriesGet200Response.md
 docs/Eatery.md
 docs/EateryCreate.md
+docs/EateryListResponse.md
 docs/EateryUpdate.md
 docs/Error.md
 docs/ImageUploadResponse.md
@@ -16,6 +15,8 @@ docs/ImagesApi.md
 docs/Pagination.md
 docs/ReviewCreate.md
 docs/ReviewDetail.md
+docs/ReviewDetailListResponse.md
+docs/ReviewListResponse.md
 docs/ReviewSummary.md
 docs/ReviewUpdate.md
 docs/ReviewsApi.md

@@ -98,7 +98,7 @@ const previewUrl = computed(() => {
       {{ storePhoto ? storePhoto.name : '写真が選択されていません' }}
 
       <div>
-        <PrimaryButton :text="'投稿'" />
+        <PrimaryButton :text="'投稿'" @click="submitStore" />
       </div>
     </div>
   </main>
