@@ -80,9 +80,17 @@ func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error
 	return nil
 }
 
-func (r *Repository) InsertImageToReview(ctx context.Context, reviewID, imageID uuid.UUID) error {
-	if _, err := r.db.ExecContext(ctx, "INSERT INTO images (id, review_id) VALUES (?, ?)", imageID, reviewID); err != nil {
+func (r *Repository) InsertImageToReview(ctx context.Context, reviewID uuid.UUID , imageIDs []uuid.UUID ) error {
+	if _, err := r.db.ExecContext(ctx, "INSERT INTO images (id, review_id) VALUES (?, ?)", imageIDs, reviewID); err != nil {
 		return fmt.Errorf("insert image to review: %w", err)
 	}
 	return nil
+}
+
+func (r *Repository) GetImageIDsByReviewID(ctx context.Context, reviewID uuid.UUID) ([]uuid.UUID, error) {
+	var imageIDs []uuid.UUID
+	if err := r.db.SelectContext(ctx, &imageIDs, "SELECT id FROM images WHERE review_id = ?", reviewID); err != nil {
+		return nil, fmt.Errorf("get image IDs by review ID: %w", err)
+	}
+	return imageIDs, nil
 }
