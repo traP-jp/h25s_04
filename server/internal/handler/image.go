@@ -14,19 +14,28 @@ import (
 
 // PostImages implements schema.ServerInterface.
 func (h *Handler) PostImages(c echo.Context) error {
-	var req schema.PostImagesMultipartRequestBody
-	if err := c.Bind(&req); err != nil {
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.Logger().Errorf("failed to get form file: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
-	b, err := req.Image.Bytes()
+	f, err := file.Open()
 	if err != nil {
-		c.Logger().Errorf("failed to read image bytes: %v", err)
+		c.Logger().Errorf("failed to open form file: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
+	}
+	defer f.Close()
+
+	b := make([]byte, file.Size)
+	if _, err := f.Read(b); err != nil {
+		c.Logger().Errorf("failed to read form file: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
 	}
 
 	contentType := http.DetectContentType(b)
 	if !strings.HasPrefix(contentType, "image/") {
+		c.Logger().Errorf("invalid image content type: %s", contentType)
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid file format")
 	}
 
