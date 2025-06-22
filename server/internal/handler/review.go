@@ -74,14 +74,19 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
 	}
+	// 画像のIDを生成し、レビューに紐づける
+	imageID := uuid.New()
+	if err := h.repo.InsertImageToReview(c.Request().Context(), reviewID, imageID); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to insert image to review").SetInternal(err)
+	}
 
 	res := schema.ReviewDetail{
 		Id:       reviewID,
 		Content:  req.Content,
 		EateryId: eateryId,
 		AuthorId: userID,
+		ImageIds: []types.UUID{types.UUID(imageID)},
 	}
-
 	return c.JSON(http.StatusOK, res)
 }
 
