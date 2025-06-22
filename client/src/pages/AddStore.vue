@@ -173,12 +173,6 @@ const submitStore = async () => {
   border-radius: 3px;
   width: 200px;
 }
-.fileInput {
-  border: 1px solid $color-secondary;
-  border-radius: 3px;
-  width: 200px;
-}
-
 .previewContainer {
   display: flex;
   justify-content: center;
