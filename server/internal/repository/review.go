@@ -100,3 +100,12 @@ func (r *Repository) UpdateReviewContent(ctx context.Context, reviewID uuid.UUID
 	}
 	return nil
 }
+
+func (r *Repository) GetReviews(ctx context.Context) ([]*Review, error) {
+	reviews := []*Review{}
+	if err := r.db.SelectContext(ctx, &reviews, "SELECT reviews, * FROM images JOIN reviews on images.review_id = reviews.id"); err != nil {
+		return nil, fmt.Errorf("get reviews with image: %w", err)
+	}
+
+	return reviews, nil
+}
