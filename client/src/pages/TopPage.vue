@@ -12,7 +12,6 @@ import EateryTile from '../components/EateryTile.vue'
 <style lang="scss" module>
 .reviewTitle {
   font-size: 36px;
-  color: $color-primary-text;
   text-align: left;
 }
 </style>
