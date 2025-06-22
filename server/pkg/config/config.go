@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -39,6 +40,9 @@ func MySQL() *mysql.Config {
 	c.DBName = getEnv("DB_NAME", "app")
 	c.Collation = "utf8mb4_general_ci"
 	c.AllowNativePasswords = true
+	loc, _ := time.LoadLocation("Asia/Tokyo")
+	c.Loc = loc
+	c.ParseTime = true
 
 	return c
 }

@@ -36,6 +36,12 @@ type Eatery struct {
 	// Id Unique identifier for the eatery
 	Id openapi_types.UUID `json:"id"`
 
+	// Latitude 緯度
+	Latitude float64 `json:"latitude"`
+
+	// Longitude 経度
+	Longitude float64 `json:"longitude"`
+
 	// Name Name of the eatery
 	Name string `json:"name"`
 
@@ -47,6 +53,12 @@ type Eatery struct {
 type EateryCreate struct {
 	// Description Description of the eatery
 	Description *string `json:"description,omitempty"`
+
+	// Latitude 緯度
+	Latitude float64 `json:"latitude"`
+
+	// Longitude 経度
+	Longitude float64 `json:"longitude"`
 
 	// Name Name of the eatery
 	Name string `json:"name"`
@@ -62,6 +74,12 @@ type EateryListResponse struct {
 type EateryUpdate struct {
 	// Description Description of the eatery
 	Description *string `json:"description,omitempty"`
+
+	// Latitude 緯度
+	Latitude *float64 `json:"latitude,omitempty"`
+
+	// Longitude 経度
+	Longitude *float64 `json:"longitude,omitempty"`
 
 	// Name Name of the eatery
 	Name *string `json:"name,omitempty"`
