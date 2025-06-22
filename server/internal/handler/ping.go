@@ -7,5 +7,5 @@ import (
 )
 
 func (h *Handler) Ping(c echo.Context) error {
-	return c.String(http.StatusOK, "pong")
+	return c.NoContent(http.StatusNoContent)
 }
