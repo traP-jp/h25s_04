@@ -53,7 +53,7 @@ func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid
 		SELECT *
 		FROM reviews
 		WHERE eatery_id = ?
-		ORDER BY id
+		ORDER BY created_at DESC
 		LIMIT ? OFFSET ?
 	`
 
