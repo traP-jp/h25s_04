@@ -331,8 +331,8 @@ type ServerInterface interface {
 	// (GET /images/{imageId})
 	GetImagesImageId(ctx echo.Context, imageId openapi_types.UUID) error
 	// Ping endpoint
-	// (GET /ping)
-	GetPing(ctx echo.Context) error
+	// (POST /ping)
+	PostPing(ctx echo.Context) error
 	// Get all reviews (summary for top page)
 	// (GET /reviews)
 	GetReviews(ctx echo.Context, params GetReviewsParams) error
@@ -565,12 +565,12 @@ func (w *ServerInterfaceWrapper) GetImagesImageId(ctx echo.Context) error {
 	return err
 }
 
-// GetPing converts echo context to params.
-func (w *ServerInterfaceWrapper) GetPing(ctx echo.Context) error {
+// PostPing converts echo context to params.
+func (w *ServerInterfaceWrapper) PostPing(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetPing(ctx)
+	err = w.Handler.PostPing(ctx)
 	return err
 }
 
@@ -730,7 +730,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/eateries/:eateryId/reviews", wrapper.PostEateriesEateryIdReviews)
 	router.POST(baseURL+"/images", wrapper.PostImages)
 	router.GET(baseURL+"/images/:imageId", wrapper.GetImagesImageId)
-	router.GET(baseURL+"/ping", wrapper.GetPing)
+	router.POST(baseURL+"/ping", wrapper.PostPing)
 	router.GET(baseURL+"/reviews", wrapper.GetReviews)
 	router.DELETE(baseURL+"/reviews/:reviewId", wrapper.DeleteReviewsReviewId)
 	router.GET(baseURL+"/reviews/:reviewId", wrapper.GetReviewsReviewId)

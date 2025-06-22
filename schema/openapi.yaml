@@ -9,7 +9,7 @@ servers:
 
 paths:
   /ping:
-    get:
+    post:
       summary: Ping endpoint
       tags:
         - Ping
