@@ -19,26 +19,33 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div :class="$style.shopInfo">
-    <div :class="$style.review">
-      <div>店名: {{ eateryDetail?.name }}</div>
-      <div>説明: {{ eateryDetail?.description }}</div>
+  <div :class="$style.info">
+    <h2>{{ eateryDetail?.name ?? '店名が未設定です' }}</h2>
+    <div>
+      <p>{{ eateryDetail?.description ?? '説明はありません' }}</p>
     </div>
   </div>
 </template>
 
 <style lang="scss" module>
-.shopInfo {
-  display: flex;
-  flex-direction: column;
-  background-color: $color-background;
+.info {
+  padding: 12px;
+  justify-items: left;
 }
-.review {
-  display: flex;
-  flex-direction: column;
+
+h2 {
+  position: relative;
+  width: 100%;
+  text-align: left;
 }
-.review div {
-  font-size: 32px;
-  color: $color-text;
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px; /* Adjust thickness of the underline */
+  background-color: black; /* Adjust color of the underline */
 }
 </style>
