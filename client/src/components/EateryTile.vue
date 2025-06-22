@@ -55,10 +55,12 @@ onMounted(async () => {
   <div :class="$style.tileView">
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
       <router-link
-        :to="{ name: 'RestaurantOverview', params: { eateryId: review.eateryId } }"
+        :to="{
+          name: 'RestaurantOverview',
+          params: { eateryId: review.eateryId },
+        }"
         class="$style.tileLink"
       >
-        >
         <div>
           <img
             v-if="review.imageIds.length > 0 && imageUrls[review.imageIds[0]]"
