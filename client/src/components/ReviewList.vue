@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { type ReviewSummary } from '../lib/apis'
 import apis from '../lib/apis'
+import review from './Review.vue'
 
 const reviews = ref<ReviewSummary[]>([
   {
@@ -30,14 +31,8 @@ onMounted(async () => {
       <option>近い順</option>
     </select>
   </div>
-  <div>
-    <div v-for="review in reviews" :key="review.id" :class="$style.tile">
-      <div>
-        <img :class="$style.foodImage" :src="review.imageIds[0]" alt="food" />
-      </div>
-      <div :class="$style.restaurantName">{{ review.eateryName }}</div>
-      <div :class="$style.username">{{ review.authorId }}</div>
-    </div>
+  <div v-for="review in reviews" :key="review.id" :class="$style.tile">
+    <review></review>
   </div>
 </template>
 
@@ -46,34 +41,5 @@ onMounted(async () => {
   display: flex;
   flex-basis: auto;
   gap: 2rem;
-}
-
-.tile {
-  display: flex;
-  flex-direction: column;
-  outline: 0.25rem solid $color-secondary;
-  background-color: $color-background;
-  color: $color-text;
-  height: 200px;
-  width: 1400px;
-  text-align: center;
-  border-radius: 1rem;
-}
-
-.foodImage {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-}
-
-.restaurantName {
-  line-height: 1;
-  font-size: 24px;
-  color: $color-text;
-}
-.username {
-  line-height: 1;
-  font-size: 16px;
-  color: $color-text;
 }
 </style>
