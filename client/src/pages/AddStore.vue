@@ -24,7 +24,7 @@ const previewUrl = computed(() => {
   <main>
     <div :class="$style.inputMenu">
       <div :class="$style.inputGroup">
-        <label :class="$style.infoLabel" for="storeName">店名</label>
+        <label for="storeName">店名</label>
         <input
           id="storeName"
           v-model="storeName"
@@ -35,9 +35,7 @@ const previewUrl = computed(() => {
         />
       </div>
       <div :class="$style.inputGroup">
-        <label :class="$style.infoLabel" for="description"
-          >営業日/営業時間</label
-        >
+        <label for="description">営業日/営業時間</label>
         <input
           id="description"
           v-model="description"
@@ -48,7 +46,7 @@ const previewUrl = computed(() => {
         />
       </div>
       <div :class="$style.inputGroup">
-        <label :class="$style.infoLabel" for="address">座標</label>
+        <label for="address">座標</label>
         <input
           id="address"
           v-model="address"
@@ -59,9 +57,7 @@ const previewUrl = computed(() => {
         />
       </div>
       <div :class="$style.inputGroup">
-        <label :class="$style.infoLabel" for="reviewContent"
-          >レビュー本文</label
-        >
+        <label for="reviewContent">レビュー本文</label>
         <textarea
           id="reviewContent"
           v-model="reviewContent"
@@ -72,14 +68,16 @@ const previewUrl = computed(() => {
         ></textarea>
       </div>
       <div :class="$style.inputGroup">
-        <label :class="$style.infoLabel" for="storePhoto">お店の写真</label>
-        <input
-          id="storePhoto"
-          :class="$style.fileInput"
-          type="file"
-          accept="image/*"
-          @change="handleFileChange"
-        />
+        <label for="storePhoto">お店の写真</label>
+        <div>
+          <input
+            id="storePhoto"
+            :class="$style.fileInput"
+            type="file"
+            accept="image/*"
+            @change="handleFileChange"
+          />
+        </div>
       </div>
       <div v-if="previewUrl" :class="$style.previewContainer">
         <img
@@ -102,14 +100,32 @@ const previewUrl = computed(() => {
   display: flex;
   flex-direction: column;
   background-color: $color-background;
-  gap: 1rem;
+  gap: 16px;
 }
 .inputGroup {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  gap: 1rem;
+  gap: 16px;
   width: 100%;
+
+  & > * {
+    margin: 8px;
+  }
+
+  & > label {
+    flex: 1;
+    color: $color-text;
+    font-size: 16px;
+    width: 200px;
+    text-align: right;
+  }
+
+  & > input,
+  & > textarea,
+  & > div {
+    flex: 3;
+    padding: 4px;
+  }
 }
 .input {
   color: $color-text;
@@ -119,16 +135,6 @@ const previewUrl = computed(() => {
   gap: 1rem;
   width: 200px;
   align-items: center;
-}
-.fileInput {
-  width: 200px;
-}
-
-.infoLabel {
-  color: $color-text;
-  font-size: 16px;
-  width: 200px;
-  text-align: left;
 }
 
 .previewContainer {
