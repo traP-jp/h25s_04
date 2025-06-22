@@ -85,6 +85,7 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		Content:  req.Content,
 		EateryId: eateryId,
 		AuthorId: userID,
+		ImageIds: []types.UUID{types.UUID(imageID)},
 	}
 	return c.JSON(http.StatusOK, res)
 }
