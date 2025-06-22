@@ -1,10 +1,25 @@
 <script lang="ts" setup>
 import RestaurantInfo from '../components/RestaurantInfo.vue'
+import { onMounted, ref } from 'vue'
+import apis, { type Eatery } from '../lib/apis'
+import useParam from '../lib/param'
+
+const eateryId = useParam('eateryId')
+const restaurantInfo = ref<Eatery | null>(null)
+
+onMounted(async () => {
+  try {
+    const response = await apis.eateriesEateryIdGet('some-eatery-id') // 適切なIDを指定
+    restaurantInfo.value = response.data
+  } catch (error) {
+    console.error('店舗詳細の取得に失敗しました:', error)
+  }
+})
 </script>
 
 <template>
   <main>
-    <RestaurantInfo></RestaurantInfo>
+    <RestaurantInfo :eatery-id="eateryId" />
   </main>
 </template>
 
