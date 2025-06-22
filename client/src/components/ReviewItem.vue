@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { type ReviewSummary } from '../lib/apis'
 import apis from '../lib/apis'
-import review from './Review.vue'
+import review from './ReviewItem.vue'
 
 const reviews = ref<ReviewSummary[]>([
   {
