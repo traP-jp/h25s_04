@@ -1,77 +1,103 @@
-<template>
-  <main class="inputMenu">
-    <div>
-      <div>
-        <span style="color: #000000">店名</span>
-        <input
-          v-model="storeName"
-          class="input"
-          type="text"
-          placeholder="入力"
-        />
-      </div>
-      <div>
-        <span style="color: #000000">説明</span>
-        <input
-          v-model="description"
-          class="input"
-          type="text"
-          placeholder="入力"
-        />
-      </div>
-      <div>
-        <input
-          v-model="message3"
-          class="input"
-          type="text"
-          placeholder="入力"
-        />
-      </div>
-      <div>
-        <span style="color: #000000">住所／座標</span>
-        <input v-model="address" class="input" type="text" placeholder="入力" />
-      </div>
-      <div>
-        <span style="color: #000000">レビュー本文</span>
-        <textarea
-          v-model="reviewContent"
-          class="input"
-          rows="5"
-          placeholder="入力"
-        ></textarea>
-      </div>
-      <span style="color: #000000">お店の写真</span
-      ><input
-        type="file"
-        accept="image/*"
-        style="border: 1px solid #b2bbc7; border-radius: 3px"
-      />
-    </div>
-    <div>
-      <PrimaryButton :text="'投稿'" />
-    </div>
-  </main>
-</template>
-
 <script lang="ts" setup>
 import PrimaryButton from '../components/PrimaryButton.vue'
 import { ref } from 'vue'
 
 const storeName = ref('')
 const description = ref('')
-const message3 = ref('')
 const address = ref('')
 const reviewContent = ref('')
+
 </script>
 
-<style>
+<template>
+  <main>
+    <div :class="$style.inputMenu">
+        <div :class="$style.inputGroup">
+          <label :class="$style.infoLabel">店名</label>
+          <input
+            v-model="storeName"
+            class="input"
+            type="text"
+            size="20"
+            placeholder="入力"
+          />
+        </div>
+        <div :class="$style.inputGroup">
+          <label :class="$style.infoLabel">営業日/営業時間</label>
+          <input
+            v-model="description"
+            class="input"
+            type="text"
+            size="20"
+            placeholder="入力"
+          />
+        </div>
+        <div :class="$style.inputGroup">
+          <label :class="$style.infoLabel">座標</label>
+          <input
+            v-model="address"
+            class="input"
+            type="text"
+            size="20"
+            placeholder="入力"
+          />
+        </div>
+        <div :class="$style.inputGroup">
+          <label :class="$style.infoLabel">レビュー本文</label>
+          <textarea
+            v-model="reviewContent"
+            class="input"
+            rows="5"
+            size="20"
+            placeholder="入力"
+          ></textarea>
+        </div>
+        <div :class="$style.inputGroup">
+          <label :class="$style.infoLabel">お店の写真</label
+          ><input class="fileInput" type="file" accept="image/*" />
+        </div>
+      
+        <div>
+          <PrimaryButton :text="'投稿'" />
+        </div>
+    </div>
+  </main>
+</template>
+
+<style lang="scss" module>
+
 .inputMenu {
-  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-background;
+  gap: 1rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
 }
 .input {
-  color: #000000;
-  background-color: #ffffff;
-  border: 1px solid #b2bbc7;
+  color: $color-text;
+  background-color: $color-background;
+  border: 1px solid $color-secondary;
   border-radius: 3px;
+  gap: 1rem;
+  width: 200px;
+  align-items: center;
+}
+.fileInput {
+  border: 1px solid $color-secondary;
+  border-radius: 3px;
+  width: 200px;
+}
+
+.infoLabel {
+  color: $color-text;
+  font-size: 16px;
+  width: 200px;
+  text-align: left;
 }
 </style>
