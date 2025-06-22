@@ -7,6 +7,7 @@ const description = ref('')
 const address = ref('')
 const reviewContent = ref('')
 const storePhoto = ref<File | null>(null)
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -68,15 +69,19 @@ const previewUrl = computed(() => {
         ></textarea>
       </div>
       <div :class="$style.inputGroup">
-        <label for="storePhoto">お店の写真</label>
+        <label :class="$style.infoLabel" for="storePhoto">お店の写真</label>
         <div>
           <input
             id="storePhoto"
-            :class="$style.fileInput"
+            ref="fileInputRef"
+            :class="$style.hiddenFileInput"
             type="file"
             accept="image/*"
             @change="handleFileChange"
           />
+          <button type="button" :class="$style.customFileButton" @click="fileInputRef?.click()">
+            ファイルを選択
+          </button>
         </div>
       </div>
       <div v-if="previewUrl" :class="$style.previewContainer">
@@ -100,12 +105,13 @@ const previewUrl = computed(() => {
   display: flex;
   flex-direction: column;
   background-color: $color-background;
-  gap: 16px;
+  gap: 1rem;
 }
 .inputGroup {
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  gap: 16px;
+  gap: 1rem;
   width: 100%;
 
   & > * {
@@ -127,6 +133,21 @@ const previewUrl = computed(() => {
     padding: 4px;
   }
 }
+.hiddenFileInput {
+  display: none;
+}
+.customFileButton {
+  background-color: $color-primary;
+  color: $color-text;
+  border: none;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 16px;
+}
+.customFileButton:hover {
+  background-color: $color-primary;
+}
 .input {
   color: $color-text;
   background-color: $color-background;
@@ -135,6 +156,11 @@ const previewUrl = computed(() => {
   gap: 1rem;
   width: 200px;
   align-items: center;
+}
+.fileInput {
+  border: 1px solid $color-secondary;
+  border-radius: 3px;
+  width: 200px;
 }
 
 .previewContainer {
