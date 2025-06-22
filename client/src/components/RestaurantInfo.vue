@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 import apis, { type Eatery } from '../lib/apis'
-import useParam from '../lib/param'
 
-const eateryId = useParam('eateryId')
+interface Props {
+  eateryId: string
+}
 
-const eateryDetail = ref<Eatery>()
-onMounted(async () => {
-  eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId.value)).data
-})
+const { eateryId } = defineProps<Props>()
+const eateryDetail = ref<Eatery | null>(null)
+
+const fetchEateryDetail = async () => {
+  try {
+    eateryDetail.value = (await apis.eateriesEateryIdGet(eateryId)).data
+  } catch (error) {
+    console.error('店舗詳細の取得に失敗しました:', error)
+  }
+}
+
+watch(() => eateryId, fetchEateryDetail, { immediate: true })
 </script>
 
 <template>
@@ -16,7 +25,6 @@ onMounted(async () => {
     <div :class="$style.review">
       <div>店名: {{ eateryDetail?.name }}</div>
       <div>説明: {{ eateryDetail?.description }}</div>
-      <div></div>
     </div>
   </div>
 </template>

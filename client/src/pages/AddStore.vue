@@ -1,77 +1,187 @@
+<script lang="ts" setup>
+import PrimaryButton from '../components/PrimaryButton.vue'
+import { ref, computed } from 'vue'
+import apis from '../lib/apis'
+
+const storeName = ref('')
+const description = ref('')
+const address = ref('')
+const reviewContent = ref('')
+const storePhoto = ref<File | null>(null)
+const fileInputRef = ref<HTMLInputElement | null>(null)
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    storePhoto.value = target.files[0]
+  }
+}
+
+const previewUrl = computed(() => {
+  return storePhoto.value ? URL.createObjectURL(storePhoto.value) : null
+})
+
+const submitStore = async () => {
+  try {
+    await apis.eateriesPost({
+      name: storeName.value,
+      description: description.value,
+    })
+    alert('店舗が追加されました！')
+  } catch (error) {
+    console.error('店舗の追加に失敗しました:', error)
+    alert('店舗の追加に失敗しました。')
+  }
+}
+</script>
+
 <template>
-  <main class="inputMenu">
-    <div>
-      <div>
-        <span style="color: #000000">店名</span>
+  <main>
+    <div :class="$style.inputMenu">
+      <div :class="$style.inputGroup">
+        <label for="storeName">店名</label>
         <input
+          id="storeName"
           v-model="storeName"
-          class="input"
+          :class="$style.input"
           type="text"
+          size="20"
           placeholder="入力"
         />
       </div>
-      <div>
-        <span style="color: #000000">説明</span>
+      <div :class="$style.inputGroup">
+        <label for="description">営業日/営業時間</label>
         <input
+          id="description"
           v-model="description"
-          class="input"
+          :class="$style.input"
           type="text"
+          size="20"
           placeholder="入力"
         />
       </div>
-      <div>
+      <div :class="$style.inputGroup">
+        <label for="address">座標</label>
         <input
-          v-model="message3"
-          class="input"
+          id="address"
+          v-model="address"
+          :class="$style.input"
           type="text"
+          size="20"
           placeholder="入力"
         />
       </div>
-      <div>
-        <span style="color: #000000">住所／座標</span>
-        <input v-model="address" class="input" type="text" placeholder="入力" />
-      </div>
-      <div>
-        <span style="color: #000000">レビュー本文</span>
+      <div :class="$style.inputGroup">
+        <label for="reviewContent">レビュー本文</label>
         <textarea
+          id="reviewContent"
           v-model="reviewContent"
-          class="input"
+          :class="$style.input"
           rows="5"
+          size="20"
           placeholder="入力"
         ></textarea>
       </div>
-      <span style="color: #000000">お店の写真</span
-      ><input
-        type="file"
-        accept="image/*"
-        style="border: 1px solid #b2bbc7; border-radius: 3px"
-      />
-    </div>
-    <div>
-      <PrimaryButton :text="'投稿'" />
+      <div :class="$style.inputGroup">
+        <label :class="$style.infoLabel" for="storePhoto">お店の写真</label>
+        <div>
+          <input
+            id="storePhoto"
+            ref="fileInputRef"
+            :class="$style.hiddenFileInput"
+            type="file"
+            accept="image/*"
+            @change="handleFileChange"
+          />
+          <button
+            type="button"
+            :class="$style.customFileButton"
+            @click="fileInputRef?.click()"
+          >
+            ファイルを選択
+          </button>
+        </div>
+      </div>
+      <div v-if="previewUrl" :class="$style.previewContainer">
+        <img
+          :src="previewUrl"
+          :alt="'プレビュー画像'"
+          :class="$style.previewImage"
+        />
+      </div>
+      {{ storePhoto ? storePhoto.name : '写真が選択されていません' }}
+
+      <div>
+        <PrimaryButton :text="'投稿'" @click="submitStore" />
+      </div>
     </div>
   </main>
 </template>
 
-<script lang="ts" setup>
-import PrimaryButton from '../components/PrimaryButton.vue'
-import { ref } from 'vue'
-
-const storeName = ref('')
-const description = ref('')
-const message3 = ref('')
-const address = ref('')
-const reviewContent = ref('')
-</script>
-
-<style>
+<style lang="scss" module>
 .inputMenu {
-  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-background;
+  gap: 1rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+
+  & > * {
+    margin: 8px;
+  }
+
+  & > label {
+    flex: 1;
+    color: $color-text;
+    font-size: 16px;
+    width: 200px;
+    text-align: right;
+  }
+
+  & > input,
+  & > textarea,
+  & > div {
+    flex: 3;
+    padding: 4px;
+  }
+}
+.hiddenFileInput {
+  display: none;
+}
+.customFileButton {
+  background-color: $color-primary;
+  color: $color-text;
+  border: none;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 16px;
+}
+.customFileButton:hover {
+  background-color: $color-primary;
 }
 .input {
-  color: #000000;
-  background-color: #ffffff;
-  border: 1px solid #b2bbc7;
+  color: $color-text;
+  background-color: $color-background;
+  border: 1px solid $color-secondary;
+  border-radius: 3px;
+  width: 200px;
+}
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  border: 1px solid $color-secondary;
   border-radius: 3px;
 }
 </style>

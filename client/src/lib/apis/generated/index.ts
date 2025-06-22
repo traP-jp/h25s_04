@@ -1,5 +1,5 @@
 /* tslint:disable */
- 
+/* eslint-disable */
 /**
  * H25S_04 Restaurant Review API
  * API for restaurant reviews and eatery management

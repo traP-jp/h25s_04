@@ -3,16 +3,19 @@ package repository
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 type (
 	Review struct {
-		Id       uuid.UUID `db:"id"`
-		EateryID uuid.UUID `db:"eatery_id"`
-		UserID   string    `db:"user_id"`
-		Content  string    `db:"content"`
+		Id        uuid.UUID `db:"id"`
+		EateryID  uuid.UUID `db:"eatery_id"`
+		UserID    string    `db:"user_id"`
+		Content   string    `db:"content"`
+		CreatedAt time.Time `db:"created_at"`
+		UpdatedAt time.Time `db:"updated_at"`
 	}
 
 	CreateEateryReviewParams struct {
@@ -50,7 +53,7 @@ func (r *Repository) GetEateryEateryIDReviews(ctx context.Context, eateryID uuid
 		SELECT *
 		FROM reviews
 		WHERE eatery_id = ?
-		ORDER BY id
+		ORDER BY created_at DESC
 		LIMIT ? OFFSET ?
 	`
 
@@ -76,6 +79,40 @@ func (r *Repository) ReviewExists(ctx context.Context, reviewID uuid.UUID) (uuid
 func (r *Repository) DeleteReview(ctx context.Context, reviewID uuid.UUID) error {
 	if _, err := r.db.ExecContext(ctx, "DELETE FROM reviews WHERE id = ?", reviewID); err != nil {
 		return fmt.Errorf("delete review: %w", err)
+	}
+	return nil
+}
+
+func (r *Repository) InsertImageToReview(ctx context.Context, reviewID uuid.UUID, imageIDs []uuid.UUID) error {
+	for _, imageID := range imageIDs {
+		if _, err := r.db.ExecContext(ctx, "INSERT INTO images (id, review_id) VALUES (?, ?)", imageID, reviewID); err != nil {
+			return fmt.Errorf("insert image to review: %w", err)
+		}
+	}
+	return nil
+}
+
+func (r *Repository) GetImageIDsByReviewID(ctx context.Context, reviewID uuid.UUID) ([]uuid.UUID, error) {
+	var imageIDs []uuid.UUID
+	if err := r.db.SelectContext(ctx, &imageIDs, "SELECT id FROM images WHERE review_id = ?", reviewID); err != nil {
+		return nil, fmt.Errorf("get image IDs by review ID: %w", err)
+	}
+	return imageIDs, nil
+}
+func (r *Repository) GetReview(ctx context.Context, reviewID uuid.UUID) (*Review, error) {
+	var review Review
+	err := r.db.GetContext(ctx, &review, `SELECT * FROM reviews WHERE id = ?`, reviewID)
+	if err != nil {
+		return nil, fmt.Errorf("get review: %w", err)
+	}
+	return &review, nil
+}
+
+func (r *Repository) UpdateReviewContent(ctx context.Context, reviewID uuid.UUID, content string) error {
+	_, err := r.db.ExecContext(ctx,
+		`UPDATE reviews SET content = ? WHERE id = ?`, content, reviewID)
+	if err != nil {
+		return fmt.Errorf("update review content: %w", err)
 	}
 	return nil
 }
