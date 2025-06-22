@@ -14,8 +14,8 @@ type (
 		EateryID  uuid.UUID `db:"eatery_id"`
 		UserID    string    `db:"user_id"`
 		Content   string    `db:"content"`
-		CreatedAt time.Time `db:"createdAt"`
-		UpdatedAt time.Time `db:"updatedAt"`
+		CreatedAt time.Time `db:"created_at"`
+		UpdatedAt time.Time `db:"updated_at"`
 	}
 
 	CreateEateryReviewParams struct {
