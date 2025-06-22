@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import { type ReviewDetail } from '../lib/apis';
-import apis from '../lib/apis';
+import { onMounted, ref } from 'vue'
+import { type ReviewDetail } from '../lib/apis'
+import apis from '../lib/apis'
 
 interface Props {
-  review: ReviewDetail;
+  review: ReviewDetail
 }
 
-const { review } = defineProps<Props>();
+const { review } = defineProps<Props>()
 
-const imageUrls = ref<Record<string, string>>({});
+const imageUrls = ref<Record<string, string>>({})
 
 onMounted(async () => {
   if (review.imageIds && review.imageIds.length > 0) {
@@ -17,14 +17,14 @@ onMounted(async () => {
       try {
         const response = await apis.imagesImageIdGet(imageId, {
           responseType: 'blob',
-        });
-        imageUrls.value[imageId] = URL.createObjectURL(response.data as Blob);
+        })
+        imageUrls.value[imageId] = URL.createObjectURL(response.data as Blob)
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     }
   }
-});
+})
 </script>
 
 <template>
