@@ -15,12 +15,11 @@ const { eateries } = defineProps<Props>()
       <router-link
         :to="{ name: 'RestaurantOverview', params: { eateryId: eatery.id } }"
       >
-        >
         <h2>{{ eatery.name ?? '店名' }}</h2>
         <p>
           {{ eatery.description ?? '説明がありません。' }}
-        </p></router-link
-      >
+        </p>
+      </router-link>
     </li>
   </ul>
 </template>
