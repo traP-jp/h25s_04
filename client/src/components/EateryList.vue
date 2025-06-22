@@ -11,7 +11,10 @@ const { eateries } = defineProps<Props>()
 <template>
   <ul>
     <li v-for="eatery in eateries" :key="eatery.id">
-      {{ eatery.name }} {{ eatery.description }}
+      <h2>{{ eatery.name ?? '店名' }}</h2>
+      <p>
+        {{ eatery.description ?? '説明がありません。' }}
+      </p>
     </li>
   </ul>
 </template>
