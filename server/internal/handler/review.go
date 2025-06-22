@@ -94,10 +94,24 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 
 // GetReviews implements schema.ServerInterface.
 func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) error {
-	return c.JSON(http.StatusNotImplemented, schema.Error{
-		Code:  "NOT_IMPLEMENTED",
-		Error: "GetReviews endpoint is not implemented yet",
-	})
+	reviews, err := h.repo.GetReviews(c.Request().Context())
+	if err != nil {
+		c.Logger().Errorf("failed to get reviews: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+	}
+
+	res := make([]schema.ReviewSummary, len(reviews))
+	for i, reviews := range reviews {
+		res[i] = schema.ReviewSummary{
+			Id:        reviews.Id,
+			EateryId:  reviews.EateryID,
+			AuthorId:  reviews.UserID,
+			CreatedAt: reviews.CreatedAt,
+			UpdatedAt: reviews.UpdatedAt,
+		}
+	}
+
+	return c.JSON(http.StatusOK, res)
 }
 
 // DeleteReviewsReviewId implements schema.ServerInterface.
