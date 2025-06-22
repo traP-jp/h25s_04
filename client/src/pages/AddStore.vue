@@ -132,8 +132,10 @@ const submitStore = async () => {
         <div>
           <input
             id="fileInput"
+            ref="fileInputRef"
             type="file"
             accept="image/*"
+            multiple
             :class="$style.hiddenFileInput"
             @change="handleFileChange"
           />
