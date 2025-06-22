@@ -88,6 +88,10 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to insert image info to DB").SetInternal(err)
 	}
 
+	go func() {
+		// traQにメッセージを投稿する処理を書く
+	}()
+
 	res := schema.ReviewDetail{
 		Id:       reviewID,
 		Content:  req.Content,

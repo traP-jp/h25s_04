@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-sql-driver/mysql"
+	"github.com/traPtitech/go-traq"
 )
 
 func getEnv(key, defaultValue string) string {
@@ -75,4 +76,11 @@ func ObjectStorage(ctx context.Context) (*aws.Config, func(*s3.Options), error) 
 
 func BucketName() string {
 	return getEnv("STORAGE_BUCKET_NAME", "h25s-04")
+}
+
+func Traq() (*traq.APIClient, context.Context) {
+	client := traq.NewAPIClient(traq.NewConfiguration())
+	auth := context.WithValue(context.Background(), traq.ContextAccessToken, getEnv("TRAQ_ACCESS_TOKEN", ""))
+
+	return client, auth
 }
