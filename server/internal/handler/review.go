@@ -77,14 +77,19 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		return c.JSON(http.StatusInternalServerError, "fail to post eatery review")
 	}
 
+	// 紐づけた画像をDBに追加する
+	if err := h.repo.InsertImageToReview(c.Request().Context(), reviewID, req.ImageIds); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to insert image info to DB").SetInternal(err)
+	}
+
 	res := schema.ReviewDetail{
 		Id:       reviewID,
 		Content:  req.Content,
 		EateryId: eateryId,
 		AuthorId: userID,
+		ImageIds: req.ImageIds,
 	}
-
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusCreated, res)
 }
 
 // GetReviews implements schema.ServerInterface.
