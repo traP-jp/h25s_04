@@ -59,7 +59,6 @@ const submitStore = async () => {
         imageIds: [imageId],
         authorId: xForwardedUser, // 必須フィールドを追加
       },
-      xForwardedUser,
     )
 
     alert('店舗とレビューが追加されました！')
