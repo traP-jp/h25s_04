@@ -4,5 +4,15 @@ import PageHeader from './components/PageHeader.vue'
 
 <template>
   <page-header></page-header>
-  <router-view />
+  <main :class="$style.main">
+    <router-view />
+  </main>
 </template>
+
+<style lang="scss" module>
+.main {
+  height: calc(100vh - 75px);
+  padding: 16px;
+  background-color: $color-background;
+}
+</style>
