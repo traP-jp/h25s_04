@@ -25,6 +25,8 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 			Id:          types.UUID(eatery.ID),
 			Name:        eatery.Name,
 			Description: eatery.Description,
+			Longitude:   eatery.Longitude,
+			Latitude:    eatery.Latitude,
 		}
 	}
 
@@ -59,6 +61,8 @@ func (h *Handler) PostEateries(c echo.Context, params schema.PostEateriesParams)
 		Id:          eateryID,
 		Name:        req.Name,
 		Description: req.Description,
+		Longitude:   req.Longitude,
+		Latitude:    req.Latitude,
 	}
 
 	return c.JSON(http.StatusOK, res)
@@ -85,6 +89,8 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 	eatery := repository.Eatery{
 		Name:        req.Name,
 		Description: req.Description,
+		Longitude:   req.Longitude,
+		Latitude:    req.Latitude,
 	}
 	if err := h.repo.UpdateEatery(c.Request().Context(), eateryId, eatery); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to update eatery: %v", err))
@@ -93,6 +99,8 @@ func (h *Handler) PutEateriesEateryId(c echo.Context, eateryId types.UUID, param
 		Id:          eateryId,
 		Name:        req.Name,
 		Description: req.Description,
+		Longitude:   req.Longitude,
+		Latitude:    req.Latitude,
 	}
 	return c.JSON(http.StatusOK, res)
 }

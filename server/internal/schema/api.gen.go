@@ -41,6 +41,12 @@ type Eatery struct {
 
 	// UpdatedAt Last update timestamp
 	UpdatedAt time.Time `json:"updatedAt"`
+
+	// Longitude Longitude of the eatery location
+	Longitude float64 `json:"longitude"`
+
+	// Latitude Latitude of the eatery location
+	Latitude float64 `json:"latitude"`
 }
 
 // EateryCreate defines model for EateryCreate.
@@ -50,6 +56,11 @@ type EateryCreate struct {
 
 	// Name Name of the eatery
 	Name string `json:"name"`
+
+	// Longitude Longitude of the eatery location
+	Longitude float64 `json:"longitude"`
+	// Latitude Latitude of the eatery location
+	Latitude float64 `json:"latitude"`
 }
 
 // EateryListResponse defines model for EateryListResponse.
