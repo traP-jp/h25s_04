@@ -1,10 +1,25 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { type ReviewSummary } from '../lib/apis'
+import { ref,watch } from 'vue'
+import { type ReviewDetail } from '../lib/apis'
 import apis from '../lib/apis'
-import review from './ReviewItem.vue'
+import ReviewItem from './ReviewItem.vue'
 
-const reviews = ref<ReviewSummary[]>([
+interface Props {
+  eateryId: string;
+}
+
+const { eateryId } = defineProps<Props>()
+const reviewsList = ref<ReviewDetail[]>()
+
+const fetchReviewsList = async () => {
+  try {
+    reviewsList.value = (await apis.eateriesEateryIdReviewsGet(eateryId)).data.data
+  } catch (error) {
+    console.error('店舗詳細の取得に失敗しました:', error)
+  }
+}
+watch(() => eateryId, fetchReviewsList, { immediate: true })
+const review = ref<ReviewDetail[]>([
   {
     imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
     eateryName: 'ぷぐま',
@@ -13,15 +28,10 @@ const reviews = ref<ReviewSummary[]>([
     createdAt: '2023-10-01T00:00:00Z',
     updatedAt: '2023-10-01T00:00:00Z',
     eateryId: '0',
-    summary: 'ぷぐまのレビュー',
+    content: 'ぷぐまのレビュー',
   },
 ])
 const sort = ref('')
-
-onMounted(async () => {
-  reviews.value = (await apis.reviewsGet()).data.data ?? []
-  console.log(reviews.value)
-})
 </script>
 
 <template>
@@ -31,8 +41,8 @@ onMounted(async () => {
       <option>近い順</option>
     </select>
   </div>
-  <div v-for="review in reviews" :key="review.id" :class="$style.tile">
-    <review></review>
+  <div v-for="review in reviewsList" :key="review.id" :class="$style.tile">
+    <ReviewItem :review="review"/>
   </div>
 </template>
 

@@ -1,33 +1,40 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { type ReviewSummary } from '../lib/apis'
+import { type Eatery, type ReviewDetail } from '../lib/apis'
 import apis from '../lib/apis'
-import review from './ReviewItem.vue'
 
-const reviews = ref<ReviewSummary[]>([
-  {
-    imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
-    eateryName: 'ぷぐま',
-    authorId: '偉大な先輩',
-    id: '0',
-    createdAt: '2023-10-01T00:00:00Z',
-    updatedAt: '2023-10-01T00:00:00Z',
-    eateryId: '0',
-    summary: 'ぷぐまのレビュー',
-  },
-])
+interface Props {
+  review: ReviewDetail;
+}
 
-onMounted(async () => {
-  reviews.value = (await apis.reviewsGet()).data.data ?? []
-  console.log(reviews.value)
-})
+const { review } = defineProps<Props>()
+
+
+
+// const reviews = ref<ReviewDetail[]>([
+//   {
+//     imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
+//     eateryName: 'ぷぐま',
+//     authorId: '偉大な先輩',
+//     id: '0',
+//     createdAt: '2023-10-01T00:00:00Z',
+//     updatedAt: '2023-10-01T00:00:00Z',
+//     eateryId: '0',
+//     content: 'ぷぐまのレビュー',
+//   },
+// ])
 </script>
 
 <template>
   <div>
+    {{ review.content }}
+  </div>
+  <div>
     <div style="display: flex">
       <div>
-        <img :class="$style.foodImage" :src="review.imageIds[0]" alt="food" />
+        <div v-for="">
+          <img :class="$style.foodImage" :src="review.imageIds" alt="food" />
+        </div>
       </div>
       <div>
         <div :class="$style.restaurantName">{{ review.eateryName }}</div>
@@ -36,7 +43,7 @@ onMounted(async () => {
     </div>
   </div>
   <div>
-    <div :class="$style.reviewsummary">{{ review.summary }}</div>
+    <div :class="$style.reviewsummary">{{ review.content }}</div>
   </div>
 </template>
 
