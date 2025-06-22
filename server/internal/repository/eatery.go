@@ -28,7 +28,7 @@ type (
 	}
 )
 
-func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesParams) ([]*Eatery, error) {
+func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesParams, limit, offset int) ([]*Eatery, error) {
 	eateries := []*Eatery{}
 	if params.Query != nil {
 		query := "%" + *params.Query + "%"

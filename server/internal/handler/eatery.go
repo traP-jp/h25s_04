@@ -13,7 +13,18 @@ import (
 
 // GetEateries implements schema.ServerInterface.
 func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) error {
-	eateries, err := h.repo.GetEateries(c.Request().Context(), params)
+	limit := 10 // Default limit
+	if params.Limit != nil {
+		limit = *params.Limit
+	}
+	pages := 1 // Default page
+	if params.Page != nil {
+		pages = *params.Page
+	}
+	offset := (pages - 1) * limit
+
+
+	eateries, err := h.repo.GetEateries(c.Request().Context(), params, limit, offset)
 	if err != nil {
 		c.Logger().Errorf("failed to get eateries: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
@@ -35,8 +46,8 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 	res := schema.EateryListResponse{
 		Data: resData,
 		Pagination: schema.Pagination{
-			Limit: 10,
-			Page:  1,
+			Limit: limit,
+			Page:  pages,
 		},
 	}
 	return c.JSON(http.StatusOK, res)
