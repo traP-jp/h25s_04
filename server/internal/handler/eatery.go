@@ -27,6 +27,8 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 			Description: eatery.Description,
 			Longitude:   eatery.Longitude,
 			Latitude:    eatery.Latitude,
+			CreatedAt:   eatery.CreatedAt,
+			UpdatedAt:   eatery.UpdatedAt,
 		}
 	}
 

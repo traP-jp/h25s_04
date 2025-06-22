@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_04/server/internal/schema"
@@ -15,6 +16,8 @@ type (
 		Description *string   `db:"description"`
 		Longitude   float64   `db:"longitude"`
 		Latitude    float64   `db:"latitude"`
+		CreatedAt   time.Time `db:"created_at"`
+		UpdatedAt   time.Time `db:"updated_at"`
 	}
 
 	CreateEateryParams struct {

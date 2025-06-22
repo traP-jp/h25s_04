@@ -48,7 +48,7 @@
       />
     </div>
     <div>
-      <PrimaryButton :text="'投稿'" />
+      <PrimaryButton :text="'投稿'" @click="submitStore" />
     </div>
   </main>
 </template>
@@ -56,12 +56,26 @@
 <script lang="ts" setup>
 import PrimaryButton from '../components/PrimaryButton.vue'
 import { ref } from 'vue'
+import apis from '../lib/apis'
 
 const storeName = ref('')
 const description = ref('')
 const message3 = ref('')
 const address = ref('')
 const reviewContent = ref('')
+
+const submitStore = async () => {
+  try {
+    await apis.eateriesPost({
+      name: storeName.value,
+      description: description.value,
+    })
+    alert('店舗が追加されました！')
+  } catch (error) {
+    console.error('店舗の追加に失敗しました:', error)
+    alert('店舗の追加に失敗しました。')
+  }
+}
 </script>
 
 <style>

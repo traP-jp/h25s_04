@@ -36,17 +36,17 @@ type Eatery struct {
 	// Id Unique identifier for the eatery
 	Id openapi_types.UUID `json:"id"`
 
+	// Latitude 緯度
+	Latitude float64 `json:"latitude"`
+
+	// Longitude 経度
+	Longitude float64 `json:"longitude"`
+
 	// Name Name of the eatery
 	Name string `json:"name"`
 
 	// UpdatedAt Last update timestamp
 	UpdatedAt time.Time `json:"updatedAt"`
-
-	// Longitude Longitude of the eatery location
-	Longitude float64 `json:"longitude"`
-
-	// Latitude Latitude of the eatery location
-	Latitude float64 `json:"latitude"`
 }
 
 // EateryCreate defines model for EateryCreate.
@@ -54,13 +54,14 @@ type EateryCreate struct {
 	// Description Description of the eatery
 	Description *string `json:"description,omitempty"`
 
+	// Latitude 緯度
+	Latitude float64 `json:"latitude"`
+
+	// Longitude 経度
+	Longitude float64 `json:"longitude"`
+
 	// Name Name of the eatery
 	Name string `json:"name"`
-
-	// Longitude Longitude of the eatery location
-	Longitude float64 `json:"longitude"`
-	// Latitude Latitude of the eatery location
-	Latitude float64 `json:"latitude"`
 }
 
 // EateryListResponse defines model for EateryListResponse.
@@ -73,6 +74,12 @@ type EateryListResponse struct {
 type EateryUpdate struct {
 	// Description Description of the eatery
 	Description *string `json:"description,omitempty"`
+
+	// Latitude 緯度
+	Latitude *float64 `json:"latitude,omitempty"`
+
+	// Longitude 経度
+	Longitude *float64 `json:"longitude,omitempty"`
 
 	// Name Name of the eatery
 	Name *string `json:"name,omitempty"`
