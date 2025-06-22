@@ -31,6 +31,11 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 
 	resData := make([]schema.ReviewDetail, len(reviews))
 	for i, review := range reviews {
+		ImageIDs, err := h.repo.GetImageIDsByReviewID(c.Request().Context(), review.Id)
+		if err != nil {
+			echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+		}
+
 		resData[i] = schema.ReviewDetail{
 			Id:        review.Id,
 			EateryId:  review.EateryID,
@@ -38,6 +43,7 @@ func (h *Handler) GetEateriesEateryIdReviews(c echo.Context, eateryId types.UUID
 			Content:   review.Content,
 			CreatedAt: review.CreatedAt,
 			UpdatedAt: review.UpdatedAt,
+			ImageIds: ImageIDs,
 		}
 	}
 
@@ -102,12 +108,18 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 
 	res := make([]schema.ReviewSummary, len(reviews))
 	for i, reviews := range reviews {
+		ImageIDs, err := h.repo.GetImageIDsByReviewID(c.Request().Context(), reviews.Id)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
+		}
+
 		res[i] = schema.ReviewSummary{
 			Id:        reviews.Id,
 			EateryId:  reviews.EateryID,
 			AuthorId:  reviews.UserID,
 			CreatedAt: reviews.CreatedAt,
 			UpdatedAt: reviews.UpdatedAt,
+			ImageIds:  ImageIDs,
 		}
 	}
 
