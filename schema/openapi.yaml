@@ -8,6 +8,20 @@ servers:
     description: Development server
 
 paths:
+  /ping:
+    get:
+      summary: Ping endpoint
+      tags:
+        - Ping
+      responses:
+        '204':
+          description: No Content
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /eateries:
     get:
       summary: Get list of eateries
