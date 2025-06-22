@@ -32,13 +32,13 @@ func (r *Repository) GetEateries(ctx context.Context, params schema.GetEateriesP
 	eateries := []*Eatery{}
 	if params.Query != nil {
 		query := "%" + *params.Query + "%"
-		if err := r.db.SelectContext(ctx, &eateries, "SELECT * FROM eateries WHERE name LIKE ? ", query); err != nil {
+		if err := r.db.SelectContext(ctx, &eateries, "SELECT * FROM eateries WHERE name LIKE ? LIMIT ? OFFSET ? ", query, limit, offset); err != nil {
 			return nil, fmt.Errorf("failed to filter eateries by query %q: %w", *params.Query, err)
 		}
 	}
 	// If no query is provided, fetch all eateries
 	if params.Query == nil {
-		if err := r.db.SelectContext(ctx, &eateries, "SELECT * FROM eateries"); err != nil {
+		if err := r.db.SelectContext(ctx, &eateries, "SELECT * FROM eateries LIMIT ? OFFSET ?", limit, offset); err != nil {
 			return nil, fmt.Errorf("failed to fetch all eateries: %w", err)
 		}
 	}
