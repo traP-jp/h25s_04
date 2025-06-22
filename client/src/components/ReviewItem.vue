@@ -2,12 +2,10 @@
 import { type ReviewDetail } from '../lib/apis'
 
 interface Props {
-  review: ReviewDetail;
+  review: ReviewDetail
 }
 
 const { review } = defineProps<Props>()
-
-
 
 // const reviews = ref<ReviewDetail[]>([
 //   {
@@ -28,14 +26,14 @@ const { review } = defineProps<Props>()
     <div style="display: flex">
       <div>
         <div v-for="image in review.imageIds">
-          <img :class="$style.foodImage" :src="image" alt="food"/>
+          <img :class="$style.foodImage" :src="image" alt="food" />
         </div>
       </div>
       <div>
         <div :class="$style.restaurantName">{{ review.eateryName }}</div>
         <div :class="$style.username">{{ review.authorId }}</div>
         <div>
-         <div :class="$style.reviewsummary">{{ review.content }}</div>
+          <div :class="$style.reviewsummary">{{ review.content }}</div>
         </div>
       </div>
     </div>

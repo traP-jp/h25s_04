@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ref,watch } from 'vue'
+import { ref, watch } from 'vue'
 import { type ReviewDetail } from '../lib/apis'
 import apis from '../lib/apis'
 import ReviewItem from './ReviewItem.vue'
 
 interface Props {
-  eateryId: string;
+  eateryId: string
 }
 
 const { eateryId } = defineProps<Props>()
@@ -24,7 +24,9 @@ const reviewsList = ref<ReviewDetail[]>([
 
 const fetchReviewsList = async () => {
   try {
-    reviewsList.value = (await apis.eateriesEateryIdReviewsGet(eateryId)).data.data
+    reviewsList.value = (
+      await apis.eateriesEateryIdReviewsGet(eateryId)
+    ).data.data
   } catch (error) {
     console.error('店舗詳細の取得に失敗しました:', error)
   }
@@ -41,7 +43,7 @@ const sort = ref('')
     </select>
   </div>
   <div v-for="review in reviewsList" :key="review.id" :class="$style.tile">
-    <ReviewItem :review="review"/>
+    <ReviewItem :review="review" />
   </div>
 </template>
 

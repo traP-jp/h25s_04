@@ -8,8 +8,8 @@ const eateryId = useParam('eateryId')
 
 <template>
   <main>
-    <RestaurantInfo :eatery-id="eateryId"/>
-    <review-list :eatery-id="eateryId"/>
+    <RestaurantInfo :eatery-id="eateryId" />
+    <review-list :eatery-id="eateryId" />
   </main>
 </template>
 
