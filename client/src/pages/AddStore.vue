@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import PrimaryButton from '../components/PrimaryButton.vue'
 import { ref, computed } from 'vue'
+import apis from '../lib/apis'
 
 const storeName = ref('')
 const description = ref('')
@@ -19,6 +20,19 @@ const handleFileChange = (event: Event) => {
 const previewUrl = computed(() => {
   return storePhoto.value ? URL.createObjectURL(storePhoto.value) : null
 })
+
+const submitStore = async () => {
+  try {
+    await apis.eateriesPost({
+      name: storeName.value,
+      description: description.value,
+    })
+    alert('店舗が追加されました！')
+  } catch (error) {
+    console.error('店舗の追加に失敗しました:', error)
+    alert('店舗の追加に失敗しました。')
+  }
+}
 </script>
 
 <template>
