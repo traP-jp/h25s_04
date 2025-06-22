@@ -9,7 +9,7 @@ const restaurantInfo = ref<Eatery | null>(null)
 
 onMounted(async () => {
   try {
-    const response = await apis.eateriesEateryIdGet('some-eatery-id') // 適切なIDを指定
+    const response = await apis.eateriesEateryIdGet(eateryId) // Use dynamic eateryId
     restaurantInfo.value = response.data
   } catch (error) {
     console.error('店舗詳細の取得に失敗しました:', error)
