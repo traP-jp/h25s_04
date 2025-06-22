@@ -30,7 +30,7 @@ onMounted(async () => {
       <option>近い順</option>
     </select>
   </div>
-  <div :class="$style.tileView">
+  <div>
     <div v-for="review in reviews" :key="review.id" :class="$style.tile">
       <div>
         <img :class="$style.foodImage" :src="review.imageIds[0]" alt="food" />
@@ -47,15 +47,6 @@ onMounted(async () => {
   flex-basis: auto;
   gap: 2rem;
 }
-.tileView {
-  display: flex;
-  flex-wrap: wrap;
-  background-color: $color-background;
-  height: 80%;
-  width: 100%;
-  gap: 0.5rem;
-  padding: 0.5rem;
-}
 
 .tile {
   display: flex;
@@ -64,7 +55,7 @@ onMounted(async () => {
   background-color: $color-background;
   color: $color-text;
   height: 200px;
-  width: 200px;
+  width: 1400px;
   text-align: center;
   border-radius: 1rem;
 }
