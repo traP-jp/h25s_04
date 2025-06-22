@@ -171,9 +171,7 @@ const submitStore = async () => {
   background-color: $color-background;
   border: 1px solid $color-secondary;
   border-radius: 3px;
-  gap: 1rem;
   width: 200px;
-  align-items: center;
 }
 .fileInput {
   border: 1px solid $color-secondary;
