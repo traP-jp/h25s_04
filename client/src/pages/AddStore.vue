@@ -79,7 +79,11 @@ const previewUrl = computed(() => {
             accept="image/*"
             @change="handleFileChange"
           />
-          <button type="button" :class="$style.customFileButton" @click="fileInputRef?.click()">
+          <button
+            type="button"
+            :class="$style.customFileButton"
+            @click="fileInputRef?.click()"
+          >
             ファイルを選択
           </button>
         </div>
