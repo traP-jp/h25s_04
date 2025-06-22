@@ -89,9 +89,9 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 		Content:  req.Content,
 		EateryId: eateryId,
 		AuthorId: userID,
-		ImageIds: imageIDs, // 画像IDを追加
+		ImageIds: imageIDs, 
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusCreated, res)
 }
 
 // GetReviews implements schema.ServerInterface.
