@@ -26,44 +26,6 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface EateriesEateryIdReviewsGet200Response
- */
-export interface EateriesEateryIdReviewsGet200Response {
-    /**
-     * 
-     * @type {Array<ReviewSummary>}
-     * @memberof EateriesEateryIdReviewsGet200Response
-     */
-    'data'?: Array<ReviewSummary>;
-    /**
-     * 
-     * @type {Pagination}
-     * @memberof EateriesEateryIdReviewsGet200Response
-     */
-    'pagination'?: Pagination;
-}
-/**
- * 
- * @export
- * @interface EateriesGet200Response
- */
-export interface EateriesGet200Response {
-    /**
-     * 
-     * @type {Array<Eatery>}
-     * @memberof EateriesGet200Response
-     */
-    'data'?: Array<Eatery>;
-    /**
-     * 
-     * @type {Pagination}
-     * @memberof EateriesGet200Response
-     */
-    'pagination'?: Pagination;
-}
-/**
- * 
- * @export
  * @interface Eatery
  */
 export interface Eatery {
@@ -116,6 +78,25 @@ export interface EateryCreate {
      * @memberof EateryCreate
      */
     'description'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface EateryListResponse
+ */
+export interface EateryListResponse {
+    /**
+     * 
+     * @type {Array<Eatery>}
+     * @memberof EateryListResponse
+     */
+    'data': Array<Eatery>;
+    /**
+     * 
+     * @type {Pagination}
+     * @memberof EateryListResponse
+     */
+    'pagination': Pagination;
 }
 /**
  * 
@@ -290,6 +271,44 @@ export interface ReviewDetail {
      * @memberof ReviewDetail
      */
     'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface ReviewDetailListResponse
+ */
+export interface ReviewDetailListResponse {
+    /**
+     * 
+     * @type {Array<ReviewDetail>}
+     * @memberof ReviewDetailListResponse
+     */
+    'data': Array<ReviewDetail>;
+    /**
+     * 
+     * @type {Pagination}
+     * @memberof ReviewDetailListResponse
+     */
+    'pagination': Pagination;
+}
+/**
+ * 
+ * @export
+ * @interface ReviewListResponse
+ */
+export interface ReviewListResponse {
+    /**
+     * 
+     * @type {Array<ReviewSummary>}
+     * @memberof ReviewListResponse
+     */
+    'data': Array<ReviewSummary>;
+    /**
+     * 
+     * @type {Pagination}
+     * @memberof ReviewListResponse
+     */
+    'pagination': Pagination;
 }
 /**
  * Summary of a review for list views (without full content)
@@ -582,7 +601,7 @@ export const EateriesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eateriesGet(query?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EateriesGet200Response>> {
+        async eateriesGet(query?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EateryListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesGet(query, page, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EateriesApi.eateriesGet']?.[localVarOperationServerIndex]?.url;
@@ -643,7 +662,7 @@ export const EateriesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesGet(query?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<EateriesGet200Response> {
+        eateriesGet(query?: string, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<EateryListResponse> {
             return localVarFp.eateriesGet(query, page, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1187,7 +1206,7 @@ export const ReviewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eateriesEateryIdReviewsGet(eateryId: string, sortBy?: EateriesEateryIdReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EateriesEateryIdReviewsGet200Response>> {
+        async eateriesEateryIdReviewsGet(eateryId: string, sortBy?: EateriesEateryIdReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewDetailListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eateriesEateryIdReviewsGet(eateryId, sortBy, page, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewsApi.eateriesEateryIdReviewsGet']?.[localVarOperationServerIndex]?.url;
@@ -1217,7 +1236,7 @@ export const ReviewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reviewsGet(sortBy?: ReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EateriesEateryIdReviewsGet200Response>> {
+        async reviewsGet(sortBy?: ReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReviewListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reviewsGet(sortBy, page, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewsApi.reviewsGet']?.[localVarOperationServerIndex]?.url;
@@ -1285,7 +1304,7 @@ export const ReviewsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eateriesEateryIdReviewsGet(eateryId: string, sortBy?: EateriesEateryIdReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<EateriesEateryIdReviewsGet200Response> {
+        eateriesEateryIdReviewsGet(eateryId: string, sortBy?: EateriesEateryIdReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReviewDetailListResponse> {
             return localVarFp.eateriesEateryIdReviewsGet(eateryId, sortBy, page, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1309,7 +1328,7 @@ export const ReviewsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reviewsGet(sortBy?: ReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<EateriesEateryIdReviewsGet200Response> {
+        reviewsGet(sortBy?: ReviewsGetSortByEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReviewListResponse> {
             return localVarFp.reviewsGet(sortBy, page, limit, options).then((request) => request(axios, basePath));
         },
         /**

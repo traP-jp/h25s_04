@@ -12,7 +12,7 @@ All URIs are relative to *http://localhost:8080/api/v1*
 |[**reviewsReviewIdPut**](#reviewsreviewidput) | **PUT** /reviews/{reviewId} | Update review|
 
 # **eateriesEateryIdReviewsGet**
-> EateriesEateryIdReviewsGet200Response eateriesEateryIdReviewsGet()
+> ReviewDetailListResponse eateriesEateryIdReviewsGet()
 
 Returns all reviews for a specific eatery
 
@@ -52,7 +52,7 @@ const { status, data } = await apiInstance.eateriesEateryIdReviewsGet(
 
 ### Return type
 
-**EateriesEateryIdReviewsGet200Response**
+**ReviewDetailListResponse**
 
 ### Authorization
 
@@ -135,7 +135,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **reviewsGet**
-> EateriesEateryIdReviewsGet200Response reviewsGet()
+> ReviewListResponse reviewsGet()
 
 Returns a list of all reviews across all eateries with images only, optimized for the top page
 
@@ -172,7 +172,7 @@ const { status, data } = await apiInstance.reviewsGet(
 
 ### Return type
 
-**EateriesEateryIdReviewsGet200Response**
+**ReviewListResponse**
 
 ### Authorization
 
