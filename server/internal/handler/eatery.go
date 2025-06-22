@@ -23,7 +23,6 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 	}
 	offset := (pages - 1) * limit
 
-
 	eateries, err := h.repo.GetEateries(c.Request().Context(), params, limit, offset)
 	if err != nil {
 		c.Logger().Errorf("failed to get eateries: %v", err)
@@ -88,8 +87,16 @@ func (h *Handler) GetEateriesEateryId(c echo.Context, eateryId types.UUID) error
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to get eatery: %v", err))
 	}
-	// TODO: Return the eatery as JSON or handle as needed
-	return c.JSON(http.StatusOK, eatery)
+	res := schema.Eatery{
+		Id:          eatery.ID,
+		Name:        eatery.Name,
+		Description: eatery.Description,
+		Longitude:   eatery.Longitude,
+		Latitude:    eatery.Latitude,
+		CreatedAt:   eatery.CreatedAt,
+		UpdatedAt:   eatery.UpdatedAt,
+	}
+	return c.JSON(http.StatusOK, res)
 
 }
 
