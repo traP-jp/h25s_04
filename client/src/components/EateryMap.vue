@@ -41,11 +41,14 @@ const markerPosition = ref([35.605958, 139.68354]) // ピンを立てる座標
 }
 
 .list {
+  width: 25%;
   color: black;
   position: absolute; /* 絶対位置に変更 */
   z-index: 1000; /* 地図より前面に表示 */
-  top: 100px; /* 必要に応じて調整 */
+  top: 16px; /* 上部の余裕 */
   left: 20px; /* 必要に応じて調整 */
+  bottom: 16px; /* 下部の余裕 */
+  max-height: calc(100% - 32px); /* 地図の高さをはみ出ないように、上下16pxずつの余裕を確保 */
   background-color: rgba(255, 255, 255, 1);
   padding: 16px;
   border-radius: 12px;
