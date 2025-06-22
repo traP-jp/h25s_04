@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Eatery } from '../lib/apis'
+import { RouterLink } from 'vue-router'
 
 interface Props {
   eateries: Eatery[]
@@ -11,10 +12,15 @@ const { eateries } = defineProps<Props>()
 <template>
   <ul>
     <li v-for="eatery in eateries" :key="eatery.id">
-      <h2>{{ eatery.name ?? '店名' }}</h2>
-      <p>
-        {{ eatery.description ?? '説明がありません。' }}
-      </p>
+      <router-link
+        :to="{ name: 'RestaurantOverview', params: { eateryId: eatery.id } }"
+      >
+        >
+        <h2>{{ eatery.name ?? '店名' }}</h2>
+        <p>
+          {{ eatery.description ?? '説明がありません。' }}
+        </p></router-link
+      >
     </li>
   </ul>
 </template>
