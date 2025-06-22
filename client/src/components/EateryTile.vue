@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue'
 import { type ReviewSummary } from '../lib/apis'
 import apis from '../lib/apis'
 
+
+
 const reviews = ref<ReviewSummary[]>([
   {
     imageIds: ['https://q.trap.jp/api/v3/public/icon/Pugma'],
@@ -15,7 +17,22 @@ const reviews = ref<ReviewSummary[]>([
     summary: 'ぷぐまのレビュー',
   },
 ])
+
+const reviewsSort = () => {
+    const compare = (a: ReviewSummary, b: ReviewSummary) => {
+        if(a.createdAt < b.createdAt) {
+            return 1;
+        }else if(a.createdAt > b.createdAt) {
+            return -1;
+        }else {
+            return 0;
+        }
+    }
+    reviews.value.sort(compare)
+}
+
 const sort = ref('')
+
 
 onMounted(async () => {
   reviews.value = (await apis.reviewsGet()).data.data ?? []
