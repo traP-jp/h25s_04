@@ -104,7 +104,17 @@ func (h *Handler) PostEateriesEateryIdReviews(c echo.Context, eateryId types.UUI
 
 // GetReviews implements schema.ServerInterface.
 func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) error {
-	reviews, err := h.repo.GetReviews(c.Request().Context())
+	limit := 10 // Default limit
+	if params.Limit != nil {
+		limit = *params.Limit
+	}
+	pages := 1 // Default page
+	if params.Page != nil {
+		pages = *params.Page
+	}
+	offset := (pages - 1) * limit
+
+	reviews, err := h.repo.GetReviews(c.Request().Context(), limit, offset)
 	if err != nil {
 		c.Logger().Errorf("failed to get reviews: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError).SetInternal(err)
@@ -128,6 +138,10 @@ func (h *Handler) GetReviews(c echo.Context, params schema.GetReviewsParams) err
 	}
 	res := schema.ReviewListResponse{
 		Data: resData,
+		Pagination: schema.Pagination{
+			Limit: limit,
+			Page:  pages,
+		},
 	}
 
 	return c.JSON(http.StatusOK, res)
