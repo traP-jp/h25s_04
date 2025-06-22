@@ -25,6 +25,8 @@ func (h *Handler) GetEateries(c echo.Context, params schema.GetEateriesParams) e
 			Id:          types.UUID(eatery.ID),
 			Name:        eatery.Name,
 			Description: eatery.Description,
+			CreatedAt:   eatery.CreatedAt,
+			UpdatedAt:   eatery.UpdatedAt,
 		}
 	}
 

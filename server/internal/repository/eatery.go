@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/traP-jp/h25s_04/server/internal/schema"
@@ -13,6 +14,8 @@ type (
 		ID          uuid.UUID `db:"id"` // UUID
 		Name        string    `db:"name"`
 		Description *string   `db:"description"`
+		CreatedAt   time.Time `db:"createdAt"`
+		UpdatedAt   time.Time `db:"updatedAt"`
 	}
 
 	CreateEateryParams struct {
