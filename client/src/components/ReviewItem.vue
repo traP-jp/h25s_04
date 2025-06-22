@@ -25,7 +25,7 @@ const { review } = defineProps<Props>()
   <div>
     <div style="display: flex">
       <div>
-        <div v-for="image in review.imageIds">
+        <div v-for="image in review.imageIds" :key="image">
           <img :class="$style.foodImage" :src="image" alt="food" />
         </div>
       </div>
