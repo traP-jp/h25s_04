@@ -150,7 +150,7 @@ const submitStore = async () => {
       </div>
       <div v-if="storePhotos.length > 0" :class="$style.previewContainer">
         <div
-          v-for="(photo, index) in storePhotos"
+          v-for="(_, index) in storePhotos"
           :key="index"
           :class="$style.previewImageWrapper"
         >
