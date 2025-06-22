@@ -21,18 +21,51 @@ const previewUrl = computed(() => {
   return storePhoto.value ? URL.createObjectURL(storePhoto.value) : null
 })
 
+const uploadImage = async () => {
+  if (!storePhoto.value) {
+    throw new Error('画像が選択されていません')
+  }
+
+  try {
+    const response = await apis.imagesPost(storePhoto.value)
+    return response.data.id // サーバーから返される画像IDを取得
+  } catch (error) {
+    console.error('画像のアップロードに失敗しました:', error)
+    throw new Error('画像のアップロードに失敗しました')
+  }
+}
+
 const submitStore = async () => {
   try {
-    await apis.eateriesPost({
+    // 画像をアップロードしてIDを取得
+    const imageId = await uploadImage()
+
+    // 店舗情報をアップロード
+    const eateryResponse = await apis.eateriesPost({
       name: storeName.value,
       description: description.value,
-      latitude: 0,
-      longitude: 0,
+      latitude: 0, // TODO: 必要に応じて座標を設定
+      longitude: 0, // TODO: 必要に応じて座標を設定
     })
-    alert('店舗が追加されました！')
+
+    const eateryId = eateryResponse.data.id // サーバーから返される店舗IDを取得
+
+    // レビューをアップロード
+    const xForwardedUser = 'exampleUserId' // TODO: 実際のログインユーザーIDを取得
+    await apis.eateriesEateryIdReviewsPost(
+      eateryId,
+      {
+        content: reviewContent.value,
+        imageIds: [imageId],
+        authorId: xForwardedUser, // 必須フィールドを追加
+      },
+      xForwardedUser,
+    )
+
+    alert('店舗とレビューが追加されました！')
   } catch (error) {
-    console.error('店舗の追加に失敗しました:', error)
-    alert('店舗の追加に失敗しました。')
+    console.error('店舗またはレビューの追加に失敗しました:', error)
+    alert('店舗またはレビューの追加に失敗しました。')
   }
 }
 </script>
