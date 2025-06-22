@@ -35,10 +35,11 @@ const markerPosition = ref([35.605958, 139.68354]) // ピンを立てる座標
 
 <style lang="scss" module>
 .map {
-  height: min(100vh, 800px);
+  height: calc(100% - 150px);
   width: 100%;
   position: relative;
 }
+
 .list {
   color: black;
   position: absolute; /* 絶対位置に変更 */
